@@ -1,0 +1,181 @@
+body {
+    margin: 0;
+}
+#editor {
+    margin: 4px;
+}
+#players {
+    //background: rgb(255, 192, 192);
+}
+#timelines {
+    background: rgb(192, 192, 255);
+}
+
+
+.OxEditor .OxVideoPlayer {
+    position: absolute;
+    margin: 4px;
+    //background: red;
+}
+
+
+
+.OxTimelineLarge {
+    position: absolute;
+    height: 72px;
+    margin: 0 4px 0 4px;
+    overflow: hidden;
+}
+.OxTimelineLarge > div {
+    position: absolute;
+    height: 72px;
+}
+.OxTimelineLarge > div > img {
+    position: absolute;
+    top: 4px;
+}
+.OxTimelineLarge .OxCut {
+    position: absolute;
+    top: 66px;
+    width: 2px;
+    height: 4px;
+    margin-left: -1px;
+    z-index: 10;
+}
+.OxTimelineLarge .OxMarkerPointIn {
+    position: absolute;
+    top: 64px;
+    width: 6px;
+    height: 6px;
+    margin-left: -5px;
+    z-index: 10;
+}
+.OxTimelineLarge .OxMarkerPointOut {
+    position: absolute;
+    top: 64px;
+    width: 6px;
+    height: 6px;
+    z-index: 10;
+}
+.OxTimelineLarge .OxMarkerPosition {
+    position: absolute;
+    top: 2px;
+    width: 9px;
+    height: 5px;
+    z-index: 10;
+}
+.OxTimelineLarge .OxSubtitle {
+    position: absolute;
+    bottom: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 1px;
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 8px;
+    line-height: 10px;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-shadow: rgba(0, 0, 0, 1) 1px 1px 1px;
+    color: rgb(255, 255, 255);
+    cursor: default;
+    overflow: hidden;
+    z-index: 10;
+    -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+.OxTimelineLarge .OxSubtitle.OxHighlight {
+    border-color: rgba(255, 255, 0, 1);
+}
+.OxTimelineSmall {
+    position: absolute;
+}
+.OxTimelineSmall > div {
+    position: absolute;
+    height: 18px;
+    margin: 3px 4px 3px 4px;
+    overflow: hidden;
+}
+.OxTimelineSmall > div > img {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.OxTimelineSmall > div > .OxTimelineSmallImage {
+    margin-top: 1px;
+}
+.OxTimelineSmall .OxMarkerPointIn {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    margin-left: -1px;
+}
+.OxTimelineSmall .OxMarkerPointOut {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    margin-left: 4px;
+}
+
+.OxVideoPlayer > .OxBar .OxInputGroup {
+    //width: 98px;
+}
+.OxVideoPlayer > .OxBar .OxButton {
+    margin-right: -1px;
+}
+.OxVideoPlayer > .OxBar .OxButton,
+.OxVideoPlayer > .OxBar .OxInput,
+.OxVideoPlayer > .OxBar .OxLabel {
+    padding: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+}
+.OxVideoPlayer > .OxBar .OxLabel {
+    //width: 22px;
+    //background: rgb(32, 32, 32);
+}
+.OxVideoPlayer .OxMarkerFrame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 16px;
+}
+.OxVideoPlayer .OxMarkerFrame > div {
+    float: left;
+}
+.OxVideoPlayer .OxMarkerFrame > .OxFrame {
+    background: rgba(0, 0, 0, 0.5);
+}
+.OxVideoPlayer .OxMarkerFrame > .OxPoster {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.OxVideoPlayer .OxMarkerPoint {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+}
+.OxVideoPlayer .OxMarkerInTop {
+    left: 4px;
+    top: 4px;
+}
+.OxVideoPlayer .OxMarkerInBottom {
+    left: 4px;
+    bottom: 20px;
+}
+.OxVideoPlayer .OxMarkerOutTop {
+    right: 4px;
+    top: 4px;
+}
+.OxVideoPlayer .OxMarkerOutBottom {
+    right: 4px;
+    bottom: 20px;
+}
+.OxVideoPlayer .OxSubtitle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    //text-shadow: rgba(0, 0, 0, 1) 2px 2px 0px;
+    text-shadow: rgba(0, 0, 0, 1) 0 0 4px;
+    color: rgb(255, 255, 255);
+    z-index: 10;
+}

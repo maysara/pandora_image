@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{{title}}</title>
+        <link rel="icon" type="image/png" href="/static/png/icon.png" />
+        <meta name="application-name" content="{{settings.SITENAME}}"/>
+        <meta name="application-url" content="{{base_url}}"/>
+        <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{settings.SITENAME}}" />
+        <link rel="alternate" type="application/atom+xml" title="{{settings.SITENAME}}" href="/atom.xml" />
+        <script>
+            try {
+                if (localStorage && !localStorage['Ox.theme']) {
+                    localStorage['Ox.theme'] = '"{{settings.CONFIG.user.ui.theme}}"';
+                }
+            } catch(e) {}
+        </script>
+        <script type="text/javascript" src="/static/js/pandora.js?{{settings.CONFIG.site.version}}"></script>
+        <meta name="title" content="{{title}}" />
+        <meta name="description" content="{{settings.CONFIG.site.description}}"/>
+        <meta property="og:title" content="{{title}}"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="{{base_url}}"/>
+        <meta property="og:image" content="{{base_url}}static/png/icon.png"/>
+        <meta property="og:site_name" content="{{settings.SITENAME}}"/>
+        <meta property="og:description" content="{{settings.CONFIG.site.description}}"/>
+        <meta name="google" value="notranslate"/>
+    </head>
+    <body>
+        <noscript>
+            <h1>{{title}}</h1>
+            <p>{{text|safe}}</p>
+            <p>{{settings.SITENAME}} requires JavaScript</p>
+        </noscript>
+    </body>
+</html>

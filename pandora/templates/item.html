@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{{settings.SITENAME}} - {{title}}</title>
+        <link rel="icon" type="image/png" href="/static/png/icon.png" />
+        <meta name="application-name" content="{{settings.SITENAME}}"/>
+        <meta name="application-url" content="{{base_url}}"/>
+        <link rel="alternate" type="application/json+oembed" href="{{base_url}}oembed?url={{current_url|urlencode}}" title="oEmbed Profile" />
+        <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{settings.SITENAME}}" />
+        <script>
+            try {
+                if (localStorage && !localStorage['Ox.theme']) {
+                    localStorage['Ox.theme'] = '"{{settings.CONFIG.user.ui.theme}}"';
+                }
+            } catch(e) {}
+        </script>
+        <script type="text/javascript" src="/static/js/pandora.js?{{settings.CONFIG.site.version}}"></script>
+        <meta name="title" content="{{title}}" />
+        {%if description %}<meta name="description" content="{{description|safe}}"/> {%endif%}
+        {%if keywords %}<meta name="keywords" content="{{keywords|safe}}"/> {%endif%}
+        <meta content="{{url}}/96p.jpg" name="thumbnail"/>
+        <meta content="{{url}}/96p.jpg" name="image_src"/>
+        <meta property="og:title" content="{{title}}"/>
+        <meta property="og:type" content="movie"/>
+        <meta property="og:url" content="{{url}}"/>
+        <meta property="og:image" content="{{url}}/256p.jpg"/>
+        <meta property="og:site_name" content="{{settings.SITENAME}}"/>
+        {%if description %}<meta property="og:description" content="{{description}}"/>{%endif%}
+        <meta name="google" value="notranslate"/>
+    </head>
+    <body>
+        <noscript>
+            <img src="/{{id}}/{{icon}}256.jpg" alt="" style="float: left; margin-right: 8px">
+            <h1>{{title}}</h1>
+            {% for i in data %}
+                <div>
+                    <b>{{i.key}}</b>: {{i.value|safe}}
+                </div>
+            {% endfor %}
+            {% for c in clips %}
+                <div style="clear:both;padding-top: 4px">
+                    <img src="/{{id}}/96p{{c.in}}.jpg" alt="" style="float: left; margin-right: 8px">
+                    {{c.annotations|safe}}
+                </div>
+            {% endfor %}
+        </noscript>
+    </body>
+</html>

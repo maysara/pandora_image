@@ -1,0 +1,28 @@
+.button {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 2px rgb(0, 0, 0);
+    cursor: pointer;
+}
+.button.playButton {
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+.button.editButton {
+    right: 8px;
+    bottom: 8px;
+}
+.interface {
+    position: absolute;
+}
+.interface.video {
+    cursor: pointer;
+}

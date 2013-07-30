@@ -1,0 +1,7 @@
+From: {{name}} <{{from}}>
+To: {{sitename}} <{{to}}>
+Subject: {{subject}}
+
+{{message}}
+
+{{footer}}

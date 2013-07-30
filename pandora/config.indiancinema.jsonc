@@ -1,0 +1,897 @@
+/*
+    indiancine.ma Settings
+
+    You can edit this file.
+*/
+
+{
+    // FIXME: not a good name
+    "additionalSort": [
+        {"key": "year", "operator": "+"},
+        {"key": "director", "operator": "+"},
+        {"key": "title", "operator": "+"}
+    ],
+    "annotations": {
+        "showUsers": true
+    },
+    "cantPlay": {
+        "icon": "NoCopyright",
+        "link": "/rights",
+        "text": "This movie is still under copyright."
+    },
+    /*
+        Capabilities are per user level.
+        They can either be general:
+            {level: true} means a user of that level has the capability)
+        or related to items:
+            {level: x} means a user of that level has the capability
+            for items of a rights level up to and including x
+    */
+    "capabilities": {
+        "canAddItems": {"student": true, "staff": true, "admin": true},
+        "canDownloadVideo": {"guest": -1, "member": -1, "student": -1, "staff": -1, "admin": -1},
+        "canEditAnnotations": {"staff": true, "admin": true},
+        "canEditEvents": {"student": true, "staff": true, "admin": true},
+        "canEditFeaturedEdits": {"student": true, "staff": true, "admin": true},
+        "canEditFeaturedLists": {"student": true, "staff": true, "admin": true},
+        "canEditFeaturedTexts": {"student": true, "staff": true, "admin": true},
+        "canEditMedia": {"student": true, "staff": true, "admin": true},
+        "canEditMetadata": {"student": true, "staff": true, "admin": true},
+        "canEditPlaces": {"student": true, "staff": true, "admin": true},
+        "canEditSitePages": {"staff": true, "admin": true},
+        "canEditUsers": {"staff": true, "admin": true},
+        "canImportAnnotations": {"student": true, "staff": true, "admin": true},
+        "canManageDocuments": {"member": true, "student": true, "staff": true, "admin": true},
+        "canManagePlacesAndEvents": {"member": true, "student": true, "staff": true, "admin": true},
+        "canManageTitlesAndNames": {"member": true, "student": true, "staff": true, "admin": true},
+        "canManageUsers": {"staff": true, "admin": true},
+        "canPlayClips": {"guest": 3, "member": 3, "student": 3, "staff": 3, "admin": 3},
+        "canPlayVideo": {"guest": 1, "member": 1, "student": 3, "staff": 3, "admin": 3},
+        "canReadText": {"guest": 0, "member": 0, "student": 1, "staff": 1, "admin": 1},
+        "canRemoveItems": {"staff": true, "admin": true},
+        "canSeeAccessed": {"student": true, "staff": true, "admin": true},
+        "canSeeDebugMenu": {"student": true, "staff": true, "admin": true},
+        "canSeeExtraItemViews": {"student": true, "staff": true, "admin": true},
+        "canSeeMedia": {"student": true, "staff": true, "admin": true},
+        "canSeeItem": {"guest": 3, "member": 3, "student": 3, "staff": 3, "admin": 3},
+        "canSeeSize": {"student": true, "staff": true, "admin": true},
+        "canSeeSoftwareVersion": {"student": true, "staff": true, "admin": true},
+        "canSendMail": {"staff": true, "admin": true}
+    },
+    /*
+        clipKeys are the properties that clips can be sorted by.
+        If sortOperator is not specified, it will be + for strings and - for numbers.
+    */
+    "clipKeys": [
+        {"id": "text", "title": "Text", "type": "string"},
+        {"id": "position", "title": "Position", "type": "float", "sortOperator": "+"},
+        {"id": "duration", "title": "Duration", "type": "float"},
+        {"id": "hue", "title": "Hue", "type": "float", "sortOperator": "+"},
+        {"id": "saturation", "title": "Saturation", "type": "float"},
+        {"id": "lightness", "title": "Lightness", "type": "float"},
+        {"id": "volume", "title": "Volume", "type": "float"}
+    ],
+    /*
+        clipLayers is the ordered list of public layers that will appear as the
+        text of clips. Excluding a layer from this list means it will not be
+        included in find annotations.
+    */
+    "clipLayers": ["subtitles", "keywords", "notes"],
+    // fixme: either this, or filter: true in itemKeys, but not both
+    "filters": [
+        {"id": "director", "title": "Director", "type": "string"},
+        {"id": "year", "title": "Year", "type": "integer"},
+        {"id": "language", "title": "Language", "type": "string"},
+        {"id": "color", "title": "Color", "type": "string"},
+        {"id": "sound", "title": "Sound", "type": "string"},
+        {"id": "productionCompany", "title": "Studio", "type": "string"},
+        {"id": "producer", "title": "Producer", "type": "string"},
+        {"id": "codirector", "title": "Co-Director", "type": "string"},
+        {"id": "writer", "title": "Writer", "type": "string"},
+        {"id": "cinematographer", "title": "Cinematographer", "type": "string"},
+        {"id": "editor", "title": "Editor", "type": "string"},
+        {"id": "composer", "title": "Composer", "type": "string"},
+        {"id": "lyricist", "title": "Lyricist", "type": "string"},
+        {"id": "actor", "title": "Actor", "type": "string"},
+        {"id": "genre", "title": "Genre", "type": "string"},
+        {"id": "keyword", "title": "Keyword", "type": "string"}
+    ],
+    "flags": false,
+    "help": [
+        {"id": "help", "title": "Help"},
+        {"id": "accounts", "title": "Accounts"},
+        {"id": "navigation", "title": "Navigation"},
+        {"id": "views", "title": "Views"},
+        {"id": "timelines", "title": "Timelines"},
+        {"id": "clips", "title": "Clips"},
+        {"id": "maps", "title": "Maps"},
+        {"id": "calendars", "title": "Calendars"},
+        {"id": "find", "title": "Find"},
+        {"id": "filters", "title": "Filters"},
+        {"id": "lists", "title": "Lists"},
+        {"id": "player", "title": "Player"},
+        {"id": "editor", "title": "Editor"},
+        {"id": "edits", "title": "Edits"},
+        {"id": "texts", "title": "Texts"},
+        {"id": "embeds", "title": "Embeds"}
+    ],
+    /*
+        An itemKey must have the following properties:
+            id: The id of the key (as known by the server)
+            title: The title of the key (as displayed by the client)
+            type: text, string, float, integer, or array of any of these
+        and can have any of the following properties:
+            autocomplete: If true, find element will autocomplete
+            autocompleteSort: Sort order of autocomplete suggestions
+            capability: A capability required to see this key
+            columnRequired: If true, the column can't be removed
+            columnWidth: Default column width in px
+            filter: If true, one can filter results by this key
+            find: If true, this key will appear as a find option
+            format: {type: "...", args: [...]}, for special formatting
+                (Ox.formatType(args) will be called)
+            secondaryId: If true, loading /value will redirect to the item
+            sort: If true, one can sort results by this key
+            sortOperator: sort operator (+, -), in case it differs from the
+                default for the key's type (+ for strings, - for numbers)
+            sortType: special sort type (title, person)
+            value: {key: "...", type: "..."}, for keys that are derived
+                from other keys (like number of actors), or "capability"
+    */
+    "itemKeys": [
+        {
+            "id": "*",
+            "title": "All",
+            "type": "text",
+            "find": true
+        },
+        {
+            "id": "title",
+            "title": "Title",
+            "type": "string",
+            "additionalSort": [{"key": "year", "operator": "+"}, {"key": "director", "operator": "+"}],
+            "autocomplete": true,
+            "autocompleteSort": [{"key": "year", "operator": "+"}],
+            "columnRequired": true,
+            "columnWidth": 180,
+            "find": true,
+            "sort": true,
+            "sortType": "title"
+        },
+        {
+            "id": "director",
+            "title": "Director",
+            "type": ["string"],
+            "additionalSort": [{"key": "year", "operator": "+"}, {"key": "title", "operator": "-"}],
+            "autocomplete": true,
+            "columnRequired": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "country",
+            "title": "Country",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 120,
+            "filter": true,
+            "find": true,
+            "sort": true
+        },
+        {
+            "id": "year",
+            "title": "Year",
+            "type": "year",
+            "additionalSort": [{"key": "director", "operator": "+"}, {"key": "title", "operator": "+"}],
+            "autocomplete": true,
+            "columnWidth": 60,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortOperator": "+"
+        },
+        {
+            "id": "language",
+            "title": "Language",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 120,
+            "filter": true,
+            "find": true,
+            "sort": true
+        },
+        {
+            "id": "runtime", 
+            "title": "Runtime", 
+            "type": "time",
+            "columnWidth": 60,
+            "format": {"type": "duration", "args": [0, "short"]},
+            "sort": true
+        },
+        {
+            "id": "color",
+            "title": "Color",
+            "type": ["string"],
+            "columnWidth": 120,
+            "filter": true,
+            "find": true,
+            "sort": true
+        },
+        {
+            "id": "sound",
+            "title": "Sound",
+            "type": ["string"],
+            "columnWidth": 120,
+            "filter": true,
+            "find": true,
+            "sort": true
+        },
+        {
+            "id": "productionCompany",
+            "title": "Studio",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "description": true,
+            "filter": true,
+            "find": true,
+            "sort": true
+        },
+        {
+            "id": "producer",
+            "title": "Producer",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "codirector",
+            "title": "Co-Director",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "writer",
+            "title": "Writer",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "cinematographer",
+            "title": "Cinematographer",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "editor",
+            "title": "Editor",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "composer",
+            "title": "Composer",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "lyricist",
+            "title": "Lyricist",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 180,
+            "filter": true,
+            "find": true,
+            "sort": true,
+            "sortType": "person"
+        },
+        {
+            "id": "actor",
+            "title": "Cast",
+            "type": ["string"],
+            "autocomplete": true,
+            "filter": true,
+            "find": true,
+            "sortType": "person"
+        },
+        {
+            "id": "numberofactors",
+            "title": "Number of Actors",
+            "type": "integer",
+            "columnWidth": 60,
+            "sort": true,
+            "value": {"key": "actor", "type": "length"}
+        },
+        {
+            "id": "name",
+            "title": "Name",
+            "type": ["string"],
+            "autocomplete": true,
+            "description": true,
+            "find": true
+        },
+        {
+            "id": "genre", 
+            "title": "Genre",
+            "type": ["string"],
+            "autocomplete": true,
+            "columnWidth": 120,
+            "filter": true,
+            "find": true,
+            "sort": true
+        },
+        {
+            "id": "keyword", 
+            "title": "Keyword",
+            "type": ["string"],
+            "autocomplete": true,
+            "filter": true,
+            "find": true
+        },
+        {
+            "id": "summary",
+            "title": "Summary",
+            "type": "text",
+            "find": true
+        },
+        {
+            "id": "id",
+            "title": "ID",
+            "type": "string",
+            "columnWidth": 90,
+            "sort": true
+        },
+        {
+            "id": "encyclopedia",
+            "title": "Encyclopedia",
+            "type": "string",
+            "capability": "canEditMetadata"
+        },
+        {
+            "id": "wiki",
+            "title": "Wiki",
+            "type": "string",
+            "capability": "canEditMetadata"
+        },
+        {
+            "id": "imdbId",
+            "title": "IMDb ID",
+            "type": "string",
+            "columnWidth": 90,
+            "secondaryId": true,
+            "sort": true
+        },
+        {
+            "id": "comments",
+            "title": "Comments",
+            "type": "text",
+            "capability": "canEditMetadata"
+        },
+        {
+            "id": "annotations",
+            "title": "Annotations",
+            "type": "string", // fixme: not the best type for this magic key
+            "find": true
+        },
+        {
+            "id": "keywords",
+            "title": "Keywords",
+            "type": "layer",
+            "find": true
+        },
+        {
+            "id": "notes",
+            "title": "Notes",
+            "type": "layer",
+            "find": true
+        },
+        {
+            "id": "subtitles",
+            "title": "Subtitles",
+            "type": "layer",
+            "find": true
+        },
+        {
+            "id": "duration",
+            "title": "Duration",
+            "type": "time",
+            "columnWidth": 90,
+            "format": {"type": "duration", "args": []},
+            "sort": true
+        },
+        {
+            "id": "resolution",
+            "title": "Resolution",
+            "type": ["integer"],
+            "capability": "canSeeMedia",
+            "columnWidth": 90,
+            "format": {"type": "resolution", "args": ["px"]},
+            "sort": true
+        },
+        {
+            "id": "aspectratio",
+            "title": "Aspect Ratio",
+            "type": "float",
+            "columnWidth": 90,
+            "format": {"type": "unit", "args": [":1", 3]},
+            "sort": true
+        },
+        {
+            "id": "pixels",
+            "title": "Pixels",
+            "type": "integer",
+            "capability": "canSeeMedia",
+            "columnWidth": 90,
+            "format": {"type": "value", "args": ["px"]},
+            "sort": true
+        },
+        {
+            "id": "hue",
+            "title": "Hue",
+            "type": "float",
+            "columnWidth": 90,
+            "format": {"type": "color", "args": ["hue"]},
+            "sort": true,
+            "sortOperator": "+"
+        },
+        {
+            "id": "saturation",
+            "title": "Saturation",
+            "type": "float",
+            "columnWidth": 90,
+            "format": {"type": "color", "args": ["saturation"]},
+            "sort": true
+        },
+        {
+            "id": "lightness",
+            "title": "Lightness",
+            "type": "float",
+            "columnWidth": 90,
+            "format": {"type": "color", "args": ["lightness"]},
+            "sort": true
+        },
+        {
+            "id": "volume",
+            "title": "Volume",
+            "type": "float",
+            "columnWidth": 60,
+            "format": {"type": "color", "args": ["lightness"]},
+            "sort": true
+        },
+        {
+            "id": "numberofcuts",
+            "title": "Number of Cuts",
+            "type": "integer",
+            "columnWidth": 60,
+            "format": {"type": "number", "args": []},
+            "sort": true,
+            "value": {"key": "cuts", "type": "length"}
+        },
+        {
+            "id": "cutsperminute",
+            "title": "Cuts per Minute",
+            "type": "float",
+            "columnWidth": 60,
+            "format": {"type": "number", "args": [3]},
+            "sort": true,
+            "value": {"key": "cuts", "type": "lengthperminute"}
+        },
+        {
+            "id": "words",
+            "title": "Number of Words",
+            "type": "integer",
+            "columnWidth": 60,
+            "format": {"type": "number", "args": []},
+            "sort": true,
+            "value": {"layer": "subtitles", "type": "words"}
+        },
+        {
+            "id": "wordsperminute",
+            "title": "Words per Minute",
+            "type": "float",
+            "columnWidth": 60,
+            "format": {"type": "number", "args": [3]},
+            "sort": true,
+            "value": {"layer": "subtitles", "type": "wordsperminute"}
+        },
+        {
+            "id": "size",
+            "title": "Size",
+            "type": "integer",
+            "capability": "canSeeSize",
+            "columnWidth": 60,
+            "format": {"type": "value", "args": ["B"]},
+            "sort": true
+        },
+        {
+            "id": "bitrate",
+            "title": "Bitrate",
+            "type": "integer",
+            "capability": "canSeeMedia",
+            "columnWidth": 60,
+            "format": {"type": "value", "args": ["bps"]},
+            "sort": true
+        },
+        {
+            "id": "parts",
+            "title": "Number of Parts",
+            "type": "integer",
+            "capability": "canSeeMedia",
+            "columnWidth": 60,
+            "sort": true
+        },
+        {
+            "id": "numberoffiles",
+            "title": "Number of Files",
+            "type": "integer",
+            "capability": "canSeeMedia",
+            "columnWidth": 60,
+            "sort": true,
+            "value": {"key": "files", "type": "length"}
+        },
+        {
+            "id": "filename",
+            "title": "Filename",
+            "type": ["string"],
+            "capability": "canSeeMedia"
+        },
+        {
+            "id": "created",
+            "title": "Date Created",
+            "type": "date",
+            "columnWidth": 150,
+            "format": {"type": "date", "args": ["%Y-%m-%d %H:%M:%S"]},
+            "sort": true
+        },
+        {
+            "id": "modified",
+            "title": "Last Modified",
+            "type": "date",
+            "columnWidth": 150,
+            "format": {"type": "date", "args": ["%Y-%m-%d %H:%M:%S"]},
+            "sort": true
+        },
+        {
+            "id": "accessed",
+            "title": "Last Accessed",
+            "type": "date",
+            "capability": "canSeeAccessed",
+            "columnWidth": 150,
+            "format": {"type": "date", "args": ["%Y-%m-%d %H:%M:%S"]},
+            "sort": true
+        },
+        {
+            "id": "timesaccessed",
+            "title": "Times Accessed",
+            "type": "integer",
+            "capability": "canSeeAccessed",
+            "columnWidth": 60,
+            "sort": true
+        },
+        {
+            "id": "rightslevel",
+            "title": "Rights Level",
+            "type": "enum",
+            "columnWidth": 90,
+            "format": {"type": "ColorLevel", "args": [
+                ["Public", "Out of Copyright", "Under Copyright", "Private"]
+            ]},
+            "sort": true,
+            "sortOperator": "+",
+            "values": ["Public", "Out of Copyright", "Under Copyright", "Private", "Unknown"]
+        },
+        {
+            "id": "canplayvideo",
+            "title": "Can Play Video",
+            "type": "boolean",
+            "value": "capability"
+        },
+        {
+            "id": "canplayclips",
+            "title": "Can Play Clips",
+            "type": "boolean",
+            "value": "capability"
+        },
+        {
+            "id": "random",
+            "title": "Random",
+            "type": "integer",
+            "sort": true
+        }
+    ],
+    /*
+        itemName specifies how items are being referred to.
+        Anything excessively long may cause layout errors.
+    */
+    "itemName": {
+        "singular": "Movie",
+        "plural": "Movies"
+    },
+    "itemRequiresVideo": false,
+    "itemViews": [
+        {"id": "info", "title": "Info"},
+        //{"id": "documents", "title": "Documents"},
+        {"id": "player", "title": "Player"},
+        {"id": "editor", "title": "Editor"},
+        {"id": "timeline", "title": "Timeline"},
+        {"id": "clips", "title": "Clips"},
+        {"id": "map", "title": "Map"},
+        {"id": "calendar", "title": "Calendar"},
+        {"id": "data", "title": "Data"},
+        {"id": "media", "title": "Media"}
+    ],
+    // fixme: should be renamed to annotationLayers
+    "layers": [
+        {
+            "id": "keywords",
+            "title": "Keywords",
+            "canAddAnnotations": {"member": true, "student": true, "staff": true, "admin": true},
+            "hasEvents": true,
+            "hasPlaces": true,
+            "item": "Keyword",
+            "overlap": true,
+            "type": "string"
+        },
+        {
+            "id": "notes",
+            "title": "Notes",
+            "canAddAnnotations": {"member": true, "student": true, "staff": true, "admin": true},
+            "hasEvents": true,
+            "hasPlaces": true,
+            "item": "Note",
+            "overlap": true,
+            "showInfo": true,
+            "type": "text"
+        },
+        {
+            "id": "subtitles",
+            "title": "Subtitles",
+            "canAddAnnotations": {"student": true, "staff": true, "admin": true},
+            "hasEvents": true,
+            "hasPlaces": true,
+            "isSubtitles": true,
+            "item": "Subtitle",
+            "type": "text"
+        }
+    ],
+    "listViews": [
+        {"id": "list", "title": "as List"},
+        {"id": "grid", "title": "as Grid"},
+        {"id": "timelines", "title": "with Timelines"},
+        {"id": "clips", "title": "with Clips"},
+        {"id": "clip", "title": "as Clips"},
+        //{"id": "video", "title": "as Videos"},
+        {"id": "map", "title": "on Map"},
+        {"id": "calendar", "title": "on Calendar"}
+    ],
+    "media": {
+        "importPosters": false,
+        "importFrames": false
+    },
+    "personalLists": [
+        {"title": "Favorites"},
+        {"title": "Black & White Films", "query": {"conditions": [{"key": "color", "value": "Black and White", "operator": "=="}], "operator": "&"}},
+        {"title": "Silent Films", "query": {"conditions": [{"key": "language", "value": "None", "operator": "=="}, {"key": "sound", "value": "Silent", "operator": "=="}], "operator": "|"}}
+    ],
+    "posters": {
+        "ratio": 0.6875
+    },
+    "rightsLevel": {"member": 3, "student": 3, "staff": 3, "admin": 3},
+    "rightsLevels": [
+        {"name": "Public", "color": [128, 255, 128]},
+        {"name": "Out of Copyright", "color": [212, 255, 128]},
+        {"name": "Under Copyright", "color": [255, 212, 128]},
+        {"name": "Private", "color": [255, 128, 128]}
+    ],
+    "sendReferrer": true,
+    "site": {
+        "description": "Indiancine.ma - A Project by Pad.ma",
+        // FIXME: "from" and "to" would be more intuitive as keys here
+        "email": {
+            // E-mail address in contact form (to)
+            "contact": "indiancine.ma@indiancine.ma",
+            "footer": "-- \nIndiancine.ma - https://indiancine.ma",
+            "prefix": "Indiancine.ma News -",
+            // E-mail address uses by the system (from)
+            "system": "system@indiancine.ma"
+        },
+	    "folderdepth": 4,
+        "https": true,
+        "locale": "en",
+        "id": "indiancinema",
+        "name": "Indiancine.ma",
+        "url": "indiancine.ma",
+        "videoprefix": ""
+    },
+    "sitePages": [
+        {"id": "about", "title": "About"},
+        {"id": "news", "title": "News"},
+        {"id": "faq", "title": "Frequently Asked Questions"},
+        {"id": "terms", "title": "Terms of Service"},
+        {"id": "copyrights", "title": "Copyrights"},
+        {"id": "contact", "title": "Contact"}
+    ],
+    "sites": [
+        {"name": "Pad.ma", "url": "pad.ma", "https": true},
+        {"name": "OxDB", "url": "0xdb.org", "https": true}
+    ],
+    "textRightsLevels": [
+        {"name": "Public", "color": [128, 255, 128]},
+        {"name": "Private", "color": [255, 128, 128]}
+    ],
+    "themes": ["oxlight", "oxmedium", "oxdark"],
+    "timelines": [
+        {"id": "antialias", "title": "Anti-Alias"},
+        {"id": "slitscan", "title": "Slit-Scan"},
+        {"id": "keyframes", "title": "Keyframes"},
+        {"id": "audio", "title": "Waveform"}
+    ],
+    "totals": [
+        {"id": "items"},
+        {"id": "runtime"},
+        {"id": "files", "admin": true},
+        {"id": "duration", "admin": true},
+        {"id": "size", "admin": true},
+        {"id": "pixels"}
+    ],
+    "tv": {
+        "showLogo": false
+    },
+    "user": {
+        "level": "guest",
+        "newsletter": true,
+        "ui": {
+            "annotationsCalendarSize": 128,
+            "annotationsFont": "small",
+            "annotationsMapSize": 128,
+            "annotationsRange": "all",
+            "annotationsSize": 256,
+            "annotationsSort": "position",
+            "calendarFind": "",
+            "calendarSelection": "",
+            "clipColumns": 2,
+            "clipSort": [{"key": "index", "operator": "+"}],
+            "clipView": "list",
+            "columns": {
+                "Colors": {
+                    "columns": ["title", "director", "country", "year", "hue", "saturation", "brightness"],
+                    "columnWidth": {}
+                }
+            },
+            "edit": "",
+            "editPoints": {},
+            "embedSize": 256,
+            "filters": [
+                {"id": "director", "sort": [{"key": "items", "operator": "-"}]},
+                {"id": "year", "sort": [{"key": "name", "operator": "+"}]},
+                {"id": "language", "sort": [{"key": "items", "operator": "-"}]},
+                {"id": "productionCompany", "sort": [{"key": "items", "operator": "-"}]},
+                {"id": "actor", "sort": [{"key": "items", "operator": "-"}]}
+            ],
+            "filtersSize": 176,
+            "find": {"conditions": [], "operator": "&"},
+            "followPlayer": true,
+            "help": "",
+            "icons": "posters",
+            "infoIconSize": 256,
+            "item": "",
+            "itemFind": "",
+            "itemSort": [{"key": "position", "operator": "+"}],
+            "itemView": "info",
+            "listColumns": ["title", "director", "year", "language", "runtime", "productionCompany"],
+            "listColumnWidth": {},
+            "listSelection": [],
+            "listSort": [{"key": "year", "operator": "+"}],
+            "listView": "grid",
+            "lists": {},
+            "locale": "",
+            "mapFind": "",
+            "mapSelection": "",
+            "page": "",
+            "part": {
+                "api": "",
+                "faq": "",
+                "help": "",
+                "news": "",
+                "tv": ""
+            },
+            "section": "items",
+            "sequenceMode": "shape",
+            "sequenceSort": [{"key": "director", "operator": "+"}],
+            "showAdvancedEmbedOptions": false,
+            "showAnnotations": true,
+            "showAnnotationsCalendar": true,
+            "showAnnotationsMap": true,
+            "showBrowser": true,
+            "showCalendarControls": true, // fixme: should be false
+            "showClips": true,
+            "showFilters": true,
+            "showIconBrowser": false,
+            "showInfo": true,
+            "showLayers": {
+                "keywords": true,
+                "notes": true,
+                "subtitles": true
+            },
+            "showMapControls": false,
+            "showMapLabels": false,
+            "showFolder": {
+                "edits": {
+                    "personal": true,
+                    "favorite": true,
+                    "featured": true
+                },
+                "items": {
+                    "personal": true,
+                    "favorite": true,
+                    "featured": true,
+                    "volumes": true
+                },
+                "texts": {
+                    "personal": true,
+                    "favorite": true,
+                    "featured": true
+                }
+            },
+            "showSidebar": true,
+            "showSitePosters": false,
+            "showTimeline": true,
+            "sidebarSize": 256,
+            "text": "",
+            "textPositions": {},
+            "theme": "oxmedium",
+            "updateAdvancedFindResults": false,
+            "videoLoop": false,
+            "videoMuted": false,
+            "videoPoints": {},
+            "videoResolution": 240,
+            "videoScale": "fit",
+            "videoSize": "small",
+            "videoSubtitles": true,
+            "videoTimeline": "slitscan",
+            "videoView": "player",
+            "videoVolume": 1
+        },
+        "username": "",
+        "volumes": []
+    },
+    // fixme: this should include colors
+    "userLevels": ["guest", "member", "student", "staff", "admin"],
+    "video": {
+        "formats": ["webm", "mp4"],
+        "previewRatio": 1.375,
+        "resolutions": [240, 480]
+    }
+}

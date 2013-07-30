@@ -1,0 +1,15 @@
+-e git+https://github.com/django/django.git@stable/1.4.x#egg=django
+-e bzr+http://code.0x2620.org/python-ox/#egg=python-ox
+-e bzr+http://code.0x2620.org/oxtimelines/#egg=oxtimelines
+simplejson
+chardet
+celery>=2.4.2
+django-celery>=2.4.2
+#django_extensions
+#-e git+https://github.com/django-extensions/django-extensions.git#egg=django_extensions
+#use fork fixing some postgresql issues
+-e git://github.com/bit/django-extensions.git#egg=django_extensions
+-e git+git://github.com/dcramer/django-devserver#egg=django_devserver
+gunicorn>=0.14.3
+html5lib
+South

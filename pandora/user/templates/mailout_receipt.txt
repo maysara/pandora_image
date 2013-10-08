@@ -1,0 +1,4 @@
+To: {{to|safe}}
+Subject: {{subject|safe}}
+
+{{message|safe}}

@@ -1,0 +1,167 @@
+pan.do/ra - open media archive
+This is an attempt to build an image archive using pandora replacing one to one video to image analogies
+for more information on pan.do/ra visit our website at https://pan.do/ra
+
+== SETUP ==
+pan.do/ra is known to work with Ubuntu 12.04,
+but other distributions should also work.
+The instructions below are for Ubuntu 12.04.
+All commans given expect that you are root.
+
+To run pan.do/ra you need to install and setup:
+    python
+    postgres
+    nginx (or apache2)
+    additinal video packages
+
+
+* Installing required packages
+1) add pandora ppa to get all packages in the required version
+
+    apt-get install python-software-properties
+    add-apt-repository ppa:j/pandora
+    apt-get update
+
+2) install all required packages
+    apt-get install bzr git subversion mercurial \
+            python-setuptools python-pip python-virtualenv ipython \
+            python-dev python-imaging python-numpy python-psycopg2 \
+            python-geoip python-html5lib python-lxml \
+            python-gst0.10 gstreamer0.10-plugins-good gstreamer0.10-plugins-bad \
+            postgresql postgresql-contrib rabbitmq-server \
+            ffmpeg2theora libav-tools libavcodec-extra-53 \
+            python-ox oxframe imagemagick
+
+
+* Prepare Environment
+1) add pandora user and set permissions
+   adduser pandora --disabled-login --disabled-password
+
+2) Setup Database
+   su postgres
+   createuser pandora
+   createdb  -T template0 --locale=C --encoding=UTF8 -O pandora pandora
+   echo "CREATE EXTENSION pg_trgm;" | psql pandora
+   exit
+
+3) Setup RabbitMQ
+Important: "use_your_own" is a password and you have to use the same value here and below for BROKER_PASSWORD
+
+    rabbitmqctl add_user pandora use_your_own
+    rabbitmqctl add_vhost /pandora
+    rabbitmqctl set_permissions -p /pandora pandora ".*" ".*" ".*"
+
+
+* Install Pan.do/ra
+1) Get code from bazzar
+    cd /srv/
+    bzr branch http://code.0x2620.org/pandora pandora
+    cd pandora
+    virtualenv --system-site-packages .
+    ./bin/pip install -r requirements.txt
+
+    cd static
+    bzr branch http://code.0x2620.org/oxjs
+
+    cd /srv
+    chown -R pandora.pandora pandora
+
+2) create local_settings.py and config.jsonc
+
+1) create file /srv/pandora/pandora/local_settings.py with the following content:
+    DATABASES = {
+        'default': {
+            'NAME': 'pandora',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'USER': 'pandora',
+            'PASSWORD': '',
+        }
+    }
+    DB_GIN_TRGM = True
+    BROKER_PASSWORD = "use_your_own"
+
+    #with apache x-sendfile or lighttpd set this to True
+    XSENDFILE = False
+
+    #with nginx X-Accel-Redirect set this to True
+    XACCELREDIRECT = True
+
+2) create config.jsonc
+    config.jsonc holds the configuration for your site.
+    To start you can copy /srv/pandora/pandora/config.pandora.jsonc
+    to /srv/pandora/pandora/config.jsonc but have a look at 
+    https://wiki.0x2620.org/wiki/pandora/configuration and
+    config.0xdb.jsonc config.padma.jsonc for configuration options.
+
+3) initialize database
+    su pandora
+    cd /srv/pandora/pandora
+    ./manage.py syncdb --noinput
+    ./manage.py migrate
+    ./manage.py sqlfindindex
+    ./manage.py sync_itemsort
+    ./manage.py collectstatic -l --noinput
+    ./manage.py update_static
+    ./manage.py compile_pyc
+
+4) install init scripts and start daemons
+    cp /srv/pandora/etc/init/*.conf /etc/init/
+    /srv/pandora/ctl start
+
+5) Setup Webserver
+a) nginx (recommended)
+    apt-get install nginx
+    cp /srv/pandora/etc/nginx/pandora /etc/nginx/sites-available/pandora
+    cd /etc/nginx/sites-enabled
+    ln -s ../sites-available/pandora
+
+    #read comments in /etc/nginx/sites-available/pandora for setting
+    #your hostname and other required settings
+    #make sure XACCELREDIRECT = True in /srv/pandora/pandora/local_settings.py
+    
+    service nginx reload
+
+b) apache2 (if you need it for other sites on the same server)
+    apt-get install apache2-mpm-prefork libapache2-mod-xsendfile
+    a2enmod xsendfile
+    cp /srv/pandora/etc/apache2/pandora.conf /etc/apache2/sites-available/pandora.conf
+    a2ensite pandora
+
+    #read comments in /etc/apache2/sites-available/pandora.conf for setting
+    #your hostname and other required settings
+    #make sure XSENDFILE = True in /srv/pandora/pandora/local_settings.py
+    
+    service apache2 reload
+
+
+Now you can open pandora in your browser, the first user to sign up will become admin.
+
+=== Updating ===
+To update a pandora installation get the latest version from bzr by running
+  su pandora
+  cd /srv/pandora
+   ./update.py
+
+this will update pandora/oxjs/python-ox and list possible upgrades to the db
+
+to update your database tables, use
+  su pandora
+  cd /srv/pandora/pandora
+   ./manage.py sqldiff -a
+to check if there are changes and
+   ./manage.py sqldiff -a | ./manage.py dbshell
+to apply them.
+
+
+=== Development ===
+  in one terminal:
+    ./manage.py runserver
+
+  and background task in another:
+    ./manage.py celeryd -B -Q celery,default,encoding
+
+  now you can access your local pandora instace at http://127.0.0.1:8000/
+
+  we use virtual machines for development, you can get a vm from our site
+  or use the script in vm/build.sh to create one.
+

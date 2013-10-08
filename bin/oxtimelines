@@ -1,7 +1,0 @@
-#!/srv/pandora/bin/python
-# EASY-INSTALL-DEV-SCRIPT: 'oxtimelines==0.20','oxtimelines'
-__requires__ = 'oxtimelines==0.20'
-from pkg_resources import require; require('oxtimelines==0.20')
-del require
-__file__ = '/srv/pandora/src/oxtimelines/bin/oxtimelines'
-execfile(__file__)

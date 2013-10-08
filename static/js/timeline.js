@@ -67,6 +67,9 @@ pandora.ui.timeline = function(data) {
             follow: function(data) {
                 pandora.UI.set({followPlayer: data.follow});
             },
+            gainfocus: function() {
+                pandora.$ui.mainMenu.replaceItemMenu();
+            },
             info: function(data) {
                 pandora.ui.annotationDialog(
                     Ox.getObjectById(pandora.site.layers, data.layer).title

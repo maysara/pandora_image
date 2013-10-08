@@ -411,7 +411,7 @@
             "type": "integer",
             "capability": "canSeeAccessed",
             "columnWidth": 60,
-            "format": {"type": "date", "args": ["%Y-%m-%d %H:%M:%S"]},
+            "format": {"type": "number", "args": []},
             "sort": true
         },
         {
@@ -689,7 +689,12 @@
     "video": {
         "download": true,
         //supported formats: webm, mp4
-        "formats": ["webm", "mp4"],
+        //wafaa commented the following line and replaced it by other line of code
+        //"formats": ["webm", "mp4"],
+        //Wafaa choose webp format instead of jpg extension fit for Images
+        //"formats": ["jpg"],
+        "formats": ["webp"],
+        //"formats": ["png"],
         "previewRatio": 1.3333333333,
         //supported resolutions are
         //1080, 720, 480, 432, 360, 288, 240, 144, 96

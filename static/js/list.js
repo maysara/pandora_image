@@ -398,13 +398,16 @@ pandora.ui.list = function() {
                 Ox.Clipboard.add(data.ids, 'item');
             },
             'delete': function(data) {
-                pandora.getListData().editable && pandora.api.removeListItems({
-                    list: pandora.user.ui._list,
-                    items: data.ids
-                }, function() {
-                    pandora.UI.set({listSelection: []});
-                    pandora.reloadList();
-                });
+                var listData = pandora.getListData();
+                if (listData.editable && listData.type == 'static') {
+                    pandora.api.removeListItems({
+                        list: pandora.user.ui._list,
+                        items: data.ids
+                    }, function() {
+                        pandora.UI.set({listSelection: []});
+                        pandora.reloadList();
+                    });
+                }
             },
             init: function(data) {
                 var folder, list;
@@ -461,19 +464,15 @@ pandora.ui.list = function() {
                     items.length && pandora.getListData().editable && pandora.api.addListItems({
                         list: pandora.user.ui._list,
                         items: items
-                    }, pandora.reloadList);
+                    }, function() {
+                        pandora.UI.set({listSelection: items});
+                        pandora.reloadList();
+                    });
                 }
             },
             select: function(data) {
                 var query;
                 pandora.UI.set('listSelection', data.ids);
-                if (data.ids.length) {
-                    pandora.$ui.mainMenu.enableItem('copy');
-                    pandora.$ui.mainMenu.enableItem('openmovie');
-                } else {
-                    pandora.$ui.mainMenu.disableItem('copy');
-                    pandora.$ui.mainMenu.disableItem('openmovie');
-                }
                 if (data.ids.length == 0) {
                     pandora.$ui.statusbar.set('selected', {items: 0});
                 } else {

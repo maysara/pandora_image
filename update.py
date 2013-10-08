@@ -83,6 +83,9 @@ if __name__ == "__main__":
             run('bzr', 'resolved', 'pandora/monkey_patch', 'pandora/monkey_patch/migrations')
             if os.path.exists('pandora/monkey_patch'):
                 run('rm', '-r', 'pandora/monkey_patch')
+        if old < 3448:
+            if os.path.exists('static/pandora'):
+                run('bzr', 'resolved', 'static/pandora')
     else:
 
         if len(sys.argv) == 1:

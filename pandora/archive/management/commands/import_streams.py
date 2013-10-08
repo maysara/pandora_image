@@ -20,7 +20,10 @@ class Command(BaseCommand):
             for f in files:
                 f = os.path.join(root, f)
                 profile, ext = os.path.splitext(os.path.basename(f))
-                if ext in ('.webm', '.mp4'):
+                '''wafaa commented the following line and replaced it by other line of code'''               
+                #if ext in ('.webm', '.mp4'):
+                #if ext in ('.jpg', '.jpeg', '.png'):
+                if ext in ('.webp'):
                     oshash = os.path.dirname(f)[-19:].replace('/', '')
                     format = ext[1:]
                     if profile.endswith('p'):

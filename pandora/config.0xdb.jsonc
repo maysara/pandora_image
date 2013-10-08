@@ -584,6 +584,7 @@
             "type": "integer",
             "capability": "canSeeAccessed",
             "columnWidth": 60,
+            "format": {"type": "number", "args": []},
             "sort": true
         },
         {
@@ -878,8 +879,10 @@
     // fixme: this should include colors
     "userLevels": ["guest", "member", "friend", "staff", "admin"],
     "video": {
-        "formats": ["webm", "mp4"],
-        // fixme: this should be named "ratio" or "defaultRatio",
+        '''Wafaa choose webp format instead of webm extension fit for Images'''
+        //"formats": ["webm", "mp4"],
+        "formats": ["webp"],
+				// fixme: this should be named "ratio" or "defaultRatio",
         // as it also applies to clip lists (on load)
         "previewRatio": 1.7777777778,
         "resolutions": [96]

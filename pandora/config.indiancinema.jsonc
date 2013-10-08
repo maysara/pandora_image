@@ -598,6 +598,7 @@
             "type": "integer",
             "capability": "canSeeAccessed",
             "columnWidth": 60,
+            "format": {"type": "number", "args": []},
             "sort": true
         },
         {
@@ -890,7 +891,9 @@
     // fixme: this should include colors
     "userLevels": ["guest", "member", "student", "staff", "admin"],
     "video": {
-        "formats": ["webm", "mp4"],
+        '''Wafaa choose webp format instead of webm extension fit for Images'''
+        //"formats": ["webm", "mp4"],
+        "formats": ["webp"],		
         "previewRatio": 1.375,
         "resolutions": [240, 480]
     }

@@ -117,12 +117,7 @@ pandora.ui.clipList = function(videoRatio) {
                 var items = data.ids.map(function(id) {
                     var item = !ui.item ? id.split('/')[0] : ui.item,
                         annotation = that.value(id, 'annotations')[0].id;
-                    return {
-                        annotation: annotation,
-                        'in': that.value(id, 'in'),
-                        item: item,
-                        out: that.value(id, 'out')
-                    }
+                    return annotation || item + '/' + that.value(id, 'in') + '-' + that.value(id, 'out');
                 })
                 Ox.Clipboard.copy(items, 'clip');
             },
@@ -130,14 +125,12 @@ pandora.ui.clipList = function(videoRatio) {
                 var items = data.ids.map(function(id) {
                     var item = !ui.item ? id.split('/')[0] : ui.item,
                         annotation = that.value(id, 'annotations')[0].id;
-                    return {
-                        annotation: annotation,
-                        'in': that.value(id, 'in'),
-                        item: item,
-                        out: that.value(id, 'out')
-                    }
+                    return annotation || item + '/' + that.value(id, 'in') + '-' + that.value(id, 'out');
                 })
                 Ox.Clipboard.add(items, 'clip');
+            },
+            gainfocus: function() {
+                pandora.$ui.mainMenu.replaceItemMenu();
             },
             init: function(data) {
                 if (!ui.item && ui.listView == 'clip'/* && pandora.$ui.statusbar*/) {
@@ -260,6 +253,7 @@ pandora.ui.clipList = function(videoRatio) {
                     !ui.item && pandora.UI.set({listSelection: []});
                     !isEmbed && pandora.$ui.mainMenu.disableItem('findsimilar');
                 }
+                pandora.$ui.mainMenu.replaceItemMenu();
             },
             pandora_itemsort: function(data) {
                 that.options({sort: data.value});

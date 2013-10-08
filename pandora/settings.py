@@ -170,7 +170,7 @@ CELERY_RESULT_BACKEND = "database"
 BROKER_HOST = "127.0.0.1"
 BROKER_PORT = 5672
 BROKER_USER = "pandora"
-BROKER_PASSWORD = "box"
+BROKER_PASSWORD = "pandora"
 BROKER_VHOST = "/pandora"
 SEND_CELERY_ERROR_EMAILS = False
 
@@ -178,7 +178,7 @@ SEND_CELERY_ERROR_EMAILS = False
 XSENDFILE = False
 
 #with nginx X-Accel-Redirect set this to True
-XACCELREDIRECT = False
+XACCELREDIRECT = True
 
 SITE_CONFIG = join(PROJECT_ROOT, 'config.jsonc')
 DEFAULT_CONFIG = join(PROJECT_ROOT, 'config.pandora.jsonc')
@@ -193,7 +193,7 @@ POSTER_PRECEDENCE = ()
 USE_IMDB = False
 
 #if you set VIDEO_PREFIX make sure cookies work accros subsomains
-VIDEO_PREFIX=''
+#VIDEO_PREFIX=''
 #VIDEO_PREFIX = '//video{uid}.example.com'
 #SESSION_COOKIE_DOMAIN = '.example.com'
 

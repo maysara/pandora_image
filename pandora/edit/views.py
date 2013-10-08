@@ -12,6 +12,7 @@ from django.db import transaction
 from django.db.models import Max
 from ox.django.http import HttpFileResponse
 from ox.django.api import actions
+from django.conf import settings
 
 from item import utils
 

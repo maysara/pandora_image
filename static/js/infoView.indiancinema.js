@@ -1030,7 +1030,7 @@ pandora.ui.infoView = function(data) {
                         '&nbsp;(<a href="/imdbId=' + data.imdbId + '">'
                         + result.data.items + ' '
                         + pandora.site.itemName.plural.toLowerCase()
-                        + '</a>' + Ox._('with the same IMDb ID') + '</a>)'
+                        + '</a> ' + Ox._('with the same IMDb ID') + '</a>)'
                     );
                 }
             });

@@ -253,6 +253,7 @@ pandora.ui.folderList = function(id, section) {
     }
     that = Ox.TableList({
         columns: columns,
+        droppable: id != 'volumes',
         items: items,
         keys: ['modified'].concat(section == 'items' ? ['query'] : ['rightslevel']),
         max: 1,

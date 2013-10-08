@@ -13,8 +13,14 @@ urlpatterns = patterns("item.views",
     (r'^(?P<id>[A-Z0-9].*)/timeline(?P<mode>[a-z]*)(?P<size>\d+)p\.(?P<format>png|jpg)$', 'timeline'),
 
     #video
-    (r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webm|ogv|mp4)$', 'video'),
-
+    #Wafaa choose webp format instead of jpg extension fit for Images   
+		#(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webm|ogv|mp4)$', 'video'),
+    #(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>png)$', 'video'),
+		#(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webp)$', 'video'),
+    #image
+    # uwe
+    (r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webp)$', 'image'),
+    
     #torrent
     (r'^(?P<id>[A-Z0-9].*)/torrent$', 'torrent'),
     (r'^(?P<id>[A-Z0-9].*)/torrent/(?P<filename>.*?)$', 'torrent'),

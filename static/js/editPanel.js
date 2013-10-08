@@ -110,12 +110,14 @@ pandora.ui.editPanel = function() {
                 .bindEvent({
                     copy: function(data) {
                         Ox.Clipboard.copy(data.ids.map(function(id) {
-                            return Ox.getObjectById(edit.clips, id);
+                            var clip = Ox.getObjectById(edit.clips, id);
+                            return clip.annotation || clip.item + '/' + clip['in'] + '-' + clip.out;
                         }), 'clip');
                     },
                     copyadd: function(data) {
                         Ox.Clipboard.add(data.ids.map(function(id) {
-                            return Ox.getObjectById(edit.clips, id);
+                            var clip = Ox.getObjectById(edit.clips, id);
+                            return clip.annotation || clip.item + '/' + clip['in'] + '-' + clip.out;
                         }), 'clip');
                     },
                     edit: function(data) {
@@ -167,12 +169,17 @@ pandora.ui.editPanel = function() {
                         if (Ox.Clipboard.type() == 'clip') {
                             pandora.api.addClips({
                                 clips: Ox.Clipboard.paste().map(function(clip) {
-                                    return {
-                                        annotation: clip.annotation,
-                                        'in': clip['in'],
-                                        item: clip.item,
-                                        out: clip.out
-                                    };
+                                    var split = clip.split('/'),
+                                        item = split[0],
+                                        points = split[1].split('-');
+                                    return Ox.extend({
+                                        item: item
+                                    }, points.length == 1 ? {
+                                        annotation: clip
+                                    } : {
+                                        'in': parseFloat(points[0]),
+                                        out: parseFloat(points[1])
+                                    });
                                 }),
                                 edit: ui.edit
                             }, function(result) {

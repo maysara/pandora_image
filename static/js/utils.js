@@ -986,7 +986,7 @@ pandora.getItemIdAndPosition = function() {
             ret = getIdAndPositionByClipId(selected[0]);
         }
     } else {
-        if (['player', 'editor', 'timeline'].indexOf(ui.itemView) > -1) {
+        if (pandora.isVideoView()) {
             ret = getIdAndPositionByItemId(ui.item);
         } else if (
             ['clips', 'map', 'calendar'].indexOf(ui.itemView) > -1
@@ -1074,7 +1074,7 @@ pandora.getListData = function(list) {
     } else {
         list = Ox.isUndefined(list) ? pandora.user.ui[pandora.user.ui.section.slice(0, -1)] : list;
     }
-    if (list) {
+    if (list && pandora.$ui.folderList) {
         Ox.forEach(pandora.$ui.folderList, function($list, id) {
             var ret = true;
             // for the current list, we have to check in which
@@ -1225,7 +1225,7 @@ pandora.getSpan = function(state, val, callback) {
             });
         } else {
             isName = val[0] == '@';
-            isVideoView = Ox.contains(['player', 'editor', 'timeline'], state.view);
+            isVideoView = pandora.isVideoView(state.view);
             canBeAnnotation = state.item && (!state.view || isVideoView) && !isName;
             canBeEvent = !state.view || state.view == 'calendar';
             canBePlace = !state.view || state.view == 'map';
@@ -1481,7 +1481,7 @@ pandora.isClipView = function(view, item) {
         item = pandora.user.ui.item;
     }
     return (
-        !item ? ['calendar', 'clip', 'map', 'video'] : ['calendar', 'clips', 'map']
+        !item ? ['calendar', 'clip', 'map'] : ['calendar', 'clips', 'map']
     ).indexOf(view) > -1;
 };
 
@@ -1495,6 +1495,18 @@ pandora.isPrintURL = function(url) {
     url = url || document.location.href;
     var hash = Ox.parseURL(url).hash;
     return /^#print(\?.*?)?$/.test(hash);
+};
+
+pandora.isVideoView = function(view, item) {
+    if (arguments.length == 0) {
+        item = pandora.user.ui.item;
+        view = !item ? pandora.user.ui.listView : pandora.user.ui.itemView;
+    } else if (arguments.length == 1) {
+        item = pandora.user.ui.item;
+    }
+    return (
+        !item ? ['video'] : ['player', 'editor', 'timeline']
+    ).indexOf(view) > -1;
 };
 
 pandora.logEvent = function(data, event, element) {

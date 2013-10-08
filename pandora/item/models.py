@@ -1066,9 +1066,14 @@ class Item(models.Model):
         size = 0
         duration = 0.0
         if streams.count() == 1:
-            url =  "%s/torrent/%s.webm" % (self.get_absolute_url(),
+            '''Wafaa choose webp format instead of webm extension fit for Images'''
+            #url =  "%s/torrent/%s.webm" % (self.get_absolute_url(),
+																					 #quote(filename.encode('utf-8')))
+            url =  "%s/torrent/%s.webp" % (self.get_absolute_url(), 
                                            quote(filename.encode('utf-8')))
-            video = "%s.webm" % base
+            '''Wafaa choose webp format instead of webm extension fit for Images'''
+            #video = "%s.webm" % base
+            video = "%s.webp" % base
             v = streams[0]
             os.symlink(v.media.path, video)
             size = v.media.size
@@ -1078,7 +1083,9 @@ class Item(models.Model):
             part = 1
             os.makedirs(base)
             for v in streams:
-                video = "%s/%s.Part %d.webm" % (base, filename, part)
+                '''Wafaa choose webp format instead of webm extension fit for Images'''
+                #video = "%s/%s.Part %d.webm" % (base, filename, part)
+                video = "%s/%s.Part %d.webp" % (base, filename, part)
                 part += 1
                 os.symlink(v.media.path, video)
                 size += v.media.size

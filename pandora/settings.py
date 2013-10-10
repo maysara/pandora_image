@@ -151,6 +151,7 @@ LOGGING = {
 }
 
 AUTH_PROFILE_MODULE = 'user.UserProfile'
+AUTH_CHECK_USERNAME = True
 
 #=========================================================================
 #Pan.do/ra related settings settings
@@ -170,7 +171,7 @@ CELERY_RESULT_BACKEND = "database"
 BROKER_HOST = "127.0.0.1"
 BROKER_PORT = 5672
 BROKER_USER = "pandora"
-BROKER_PASSWORD = "pandora"
+BROKER_PASSWORD = "box"
 BROKER_VHOST = "/pandora"
 SEND_CELERY_ERROR_EMAILS = False
 
@@ -178,13 +179,13 @@ SEND_CELERY_ERROR_EMAILS = False
 XSENDFILE = False
 
 #with nginx X-Accel-Redirect set this to True
-XACCELREDIRECT = True
+XACCELREDIRECT = False
 
 SITE_CONFIG = join(PROJECT_ROOT, 'config.jsonc')
 DEFAULT_CONFIG = join(PROJECT_ROOT, 'config.pandora.jsonc')
 RELOAD_CONFIG = True
 
-#used if CONFIG['video']['download'] is set
+#used if CONFIG['canDownloadVideo'] is set
 TRACKER_URL="udp://tracker.openbittorrent.com:80"
 
 DATA_SERVICE = ''
@@ -193,7 +194,7 @@ POSTER_PRECEDENCE = ()
 USE_IMDB = False
 
 #if you set VIDEO_PREFIX make sure cookies work accros subsomains
-#VIDEO_PREFIX=''
+VIDEO_PREFIX=''
 #VIDEO_PREFIX = '//video{uid}.example.com'
 #SESSION_COOKIE_DOMAIN = '.example.com'
 

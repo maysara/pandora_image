@@ -183,6 +183,10 @@ class Item(models.Model):
     def get(self, key, default=None):
         if key == 'rightslevel':
             return self.level
+        if key == 'user':
+            return self.user and self.user.username or None
+        if key == 'groups':
+            return [g.name for g in self.groups.all()]
         if self.data and key in self.data:
             return self.data[key]
         if self.external_data and key in self.external_data:
@@ -321,7 +325,7 @@ class Item(models.Model):
     def __unicode__(self):
         year = self.get('year')
         if year:
-            string = u'%s (%s)' % (self.get('title', 'Untitled'), self.get('year'))
+            string = u'%s (%s)' % (ox.decode_html(self.get('title', 'Untitled')), self.get('year'))
         else:
             string = self.get('title', u'Untitled')
         return u'[%s] %s' % (self.itemId,string)
@@ -666,10 +670,7 @@ class Item(models.Model):
                     save(i, self.level)
                 elif i == 'filename':
                     save(i, '\n'.join(self.all_paths()))
-                elif i == 'user':
-                    if self.user:
-                        save(i, self.user.username)
-                elif key['id'] == 'annotations':
+                elif i == 'annotations':
                     qs = Annotation.objects.filter(item=self)
                     qs = qs.filter(layer__in=Annotation.public_layers()).exclude(findvalue=None)
                     qs = qs.order_by('start')
@@ -742,6 +743,7 @@ class Item(models.Model):
             'duration',
             'hue',
             'id',
+            'oxdbId',
             'lightness',
             'modified',
             'numberofannotations',
@@ -815,6 +817,7 @@ class Item(models.Model):
 
         #sort keys based on database, these will always be available
         s.itemId = self.itemId.replace('0x', 'xx')
+        s.oxdbId = self.oxdbId
         if not settings.USE_IMDB:
             s.itemId = ox.sort_string(str(ox.fromAZ(s.itemId)))
         s.modified = self.modified or datetime.now()
@@ -826,9 +829,11 @@ class Item(models.Model):
             s.words = sum([len(a.value.split()) for a in self.annotations.exclude(value='')])
             s.clips = self.clips.count()
 
+        s.numberoffiles = self.files.all().count()
         videos = self.files.filter(selected=True).filter(Q(is_video=True)|Q(is_audio=True))
         if videos.count() > 0:
-            s.duration = sum([v.duration for v in videos])
+            #s.duration = sum([v.duration for v in videos])
+            s.duration = sum([v.duration for v in self.streams()])
             v = videos[0]
             if v.is_audio:
                 s.resolution = None
@@ -841,7 +846,6 @@ class Item(models.Model):
             if not s.aspectratio and v.display_aspect_ratio:
                 s.aspectratio = float(utils.parse_decimal(v.display_aspect_ratio))
             s.pixels = sum([v.pixels for v in videos])
-            s.numberoffiles = self.files.all().count()
             s.parts = videos.count()
             s.size = sum([v.size for v in videos]) #FIXME: only size of movies?
             if s.duration:
@@ -1056,6 +1060,8 @@ class Item(models.Model):
             return
         base = self.path('torrent')
         base = os.path.abspath(os.path.join(settings.MEDIA_ROOT, base))
+        if isinstance(base, unicode):
+            base = base.encode('utf-8')
         if os.path.exists(base):
             shutil.rmtree(base)
         ox.makedirs(base)
@@ -1147,10 +1153,11 @@ class Item(models.Model):
         self.make_torrent()
         self.rendered = streams.count() > 0
         self.save()
-        if async:
-            get_sequences.delay(self.itemId)
-        else:
-            get_sequences(self.itemId)
+        if self.rendered:
+            if async:
+                get_sequences.delay(self.itemId)
+            else:
+                get_sequences(self.itemId)
 
     def save_poster(self, data):
         self.poster.name = self.path('poster.jpg')

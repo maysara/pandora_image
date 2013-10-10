@@ -75,23 +75,6 @@
         included in find annotations.
     */
     "clipLayers": ["subtitles"],
-    // fixme: either this, or filter: true in itemKeys, but not both
-    "filters": [
-        {"id": "director", "title": "Director", "type": "string"},
-        {"id": "country", "title": "Country", "type": "string"},
-        {"id": "year", "title": "Year", "type": "integer"},
-        {"id": "language", "title": "Language", "type": "string"},
-        {"id": "color", "title": "Color", "type": "string"},
-        {"id": "sound", "title": "Sound", "type": "string"},
-        {"id": "writer", "title": "Writer", "type": "string"},
-        {"id": "producer", "title": "Producer", "type": "string"},
-        {"id": "cinematographer", "title": "Cinematographer", "type": "string"},
-        {"id": "editor", "title": "Editor", "type": "string"},
-        {"id": "actor", "title": "Actor", "type": "string"},
-        {"id": "productionCompany", "title": "Studio", "type": "string"},
-        {"id": "genre", "title": "Genre", "type": "string"},
-        {"id": "keyword", "title": "Keyword", "type": "string"}
-    ],
     "flags": true,
     "help": [
         {"id": "help", "title": "Help"},
@@ -304,6 +287,7 @@
             "type": ["string"],
             "autocomplete": true,
             "columnWidth": 180,
+            "filter": true,
             "find": true,
             "sort": true
         },
@@ -398,6 +382,13 @@
         {
             "id": "id",
             "title": "ID",
+            "type": "string",
+            "columnWidth": 90,
+            "sort": true
+        },
+        {
+            "id": "oxdbId",
+            "title": "0xDB ID",
             "type": "string",
             "columnWidth": 90,
             "sort": true
@@ -687,6 +678,12 @@
         "importPosters": true,
         "importFrames": true
     },
+    "menuExtras": [
+        "user",
+        //"persona",
+        //"locale",
+        "reload"
+    ],
     "personalLists": [
         {"title": "Favorites"},
         {"title": "1960s", "query": {"conditions": [{"key": "year", "value": ["1960", "1970"], "operator": "="}], "operator": "&"}}
@@ -717,7 +714,6 @@
             "system": "0xDB@0xDB.org"
         },
         "https": true,
-        "locale": "en",
         "id": "0xdb",
         "name": "0xDB",
         "url": "0xDB.org",
@@ -772,7 +768,6 @@
             "calendarSelection": "",
             "clipColumns": 2,
             "clipSort": [{"key": "index", "operator": "+"}],
-            "clipView": "list",
             "columns": {
                 "Colors": {
                     "columns": ["title", "director", "country", "year", "hue", "saturation", "brightness"],
@@ -780,7 +775,7 @@
                 }
             },
             "edit": "",
-            "editPoints": {},
+            "edits": {},
             "embedSize": 256,
             "filters": [
                 {"id": "director", "sort": [{"key": "items", "operator": "-"}]},
@@ -805,7 +800,7 @@
             "listSort": [{"key": "director", "operator": "+"}],
             "listView": "grid",
             "lists": {},
-            "locale": "",
+            "locale": "en",
             "mapFind": "",
             "mapSelection": "",
             "page": "",
@@ -814,6 +809,7 @@
                 "faq": "",
                 "help": "",
                 "news": "",
+                "preferences": "",
                 "tv": ""
             },
             "section": "items",
@@ -859,7 +855,7 @@
             "showTimeline": true,
             "sidebarSize": 256,
             "text": "",
-            "textPositions": {},
+            "texts": {},
             "theme": "oxdark",
             "updateAdvancedFindResults": false,
             "videoLoop": false,
@@ -879,7 +875,8 @@
     // fixme: this should include colors
     "userLevels": ["guest", "member", "friend", "staff", "admin"],
     "video": {
-        '''Wafaa choose webp format instead of webm extension fit for Images'''
+        "torrent": true,
+        //Wafaa choose webp format instead of webm extension fit for Images
         //"formats": ["webm", "mp4"],
         "formats": ["webp"],
 				// fixme: this should be named "ratio" or "defaultRatio",

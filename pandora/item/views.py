@@ -320,6 +320,8 @@ def autocomplete(request):
     key = settings.CONFIG['keys'][data['key']]
     order_by = key.get('autocompleteSort', False)
     if order_by:
+        for o in order_by:
+            if o['operator'] != '-': o['operator'] = '' 
         order_by = ','.join(['%(operator)ssort__%(key)s' % o for o in order_by])
     else:
         order_by = '-items'
@@ -829,6 +831,36 @@ def timeline(request, id, size, position=-1, format='jpg', mode=None):
         path = timeline()
     return HttpFileResponse(path, content_type='image/jpeg')
 
+def download(request, id, index=1):
+    item = get_object_or_404(models.Item, itemId=id)
+    resolution = max(settings.CONFIG['video']['resolutions'])
+    format = 'webm'
+
+    if not item.access(request.user):
+        return HttpResponseForbidden()
+    if index:
+        index = int(index) - 1
+    else:
+        index = 0
+    streams = item.streams()
+    if index + 1 > streams.count():
+        raise Http404
+    stream = streams[index].get(resolution, format)
+    if not stream.available or not stream.media:
+        raise Http404
+    path = stream.media.path
+    content_type = mimetypes.guess_type(path)[0]
+    ext = os.path.splitext(path)[-1]
+    filename = "%s - %s %s%s" % (
+        item.get('title'),
+        settings.SITENAME,
+        item.itemId,
+        ext
+    )
+    response = HttpFileResponse(path, content_type=content_type)
+    response['Content-Disposition'] = "attachment; filename*=UTF-8''%s" % quote(filename.encode('utf-8'))
+    return response
+
 def torrent(request, id, filename=None):
     item = get_object_or_404(models.Item, itemId=id)
     if not item.access(request.user):
@@ -849,65 +881,6 @@ def torrent(request, id, filename=None):
     response = HttpFileResponse(filename)
     response['Content-Disposition'] = "attachment; filename*=UTF-8''%s" % \
                                       quote(os.path.basename(filename.encode('utf-8')))
-    return response
-# video is to be replaced by "image" , we need to know where this is called from ... (what about debuggin/tracing possibilities, print stack and stuff) -- uwe
-def image(request, id, resolution, format, index=None):
-    resolution = int(resolution)
-    resolutions = sorted(settings.CONFIG['video']['resolutions'])
-    if resolution not in resolutions:
-        raise Http404
-    item = get_object_or_404(models.Item, itemId=id)
-    if not item.access(request.user):
-        return HttpResponseForbidden()
-    if index:
-        index = int(index) - 1
-    else:
-        index = 0
-    streams = item.streams()
-    if index + 1 > streams.count():
-        raise Http404
-    stream = streams[index].get(resolution, format)
-    if not stream.available or not stream.media:
-        raise Http404
-    path = stream.media.path
-
-    #server side cutting
-    #FIXME: this needs to join segments if needed
-    t = request.GET.get('t')
-    if t:
-        def parse_timestamp(s):
-            if ':' in s:
-                s = ox.time2ms(s) / 1000
-            return float(s)
-        t = map(parse_timestamp, t.split(','))
-        ext = '.%s' % format
-        content_type = mimetypes.guess_type(path)[0]
-        if len(t) == 2 and t[1] > t[0] and stream.info['duration']>=t[1]:
-            response = HttpResponse(extract.chop(path, t[0], t[1]), content_type=content_type)
-            filename = u"Clip of %s - %s-%s - %s %s%s" % (
-                item.get('title'),
-                ox.format_duration(t[0] * 1000).replace(':', '.')[:-4],
-                ox.format_duration(t[1] * 1000).replace(':', '.')[:-4],
-                settings.SITENAME,
-                item.itemId,
-                ext
-            )
-            response['Content-Disposition'] = "attachment; filename*=UTF-8''%s" % quote(filename.encode('utf-8'))
-            return response
-        else:
-            filename = "%s - %s %s%s" % (
-                item.get('title'),
-                settings.SITENAME,
-                item.itemId,
-                ext
-            )
-            response = HttpFileResponse(path, content_type=content_type)
-            response['Content-Disposition'] = "attachment; filename*=UTF-8''%s" % quote(filename.encode('utf-8'))
-            return response
-    if not settings.XSENDFILE and not settings.XACCELREDIRECT:
-        return redirect(stream.media.url)
-    response = HttpFileResponse(path)
-    response['Cache-Control'] = 'public'
     return response
 
 def video(request, id, resolution, format, index=None):

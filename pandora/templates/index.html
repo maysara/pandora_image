@@ -28,9 +28,13 @@
     </head>
     <body>
         <noscript>
-            <h1>{{title}}</h1>
-            <p>{{text|safe}}</p>
-            <p>{{settings.SITENAME}} requires JavaScript</p>
+            <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; text-align: center; background-color: rgb(144, 144, 144); font-family: Lucida Grande, Segoe UI, DejaVu Sans, Lucida Sans Unicode, Helvetica, Arial, sans-serif; font-size: 11px; color: rgb(0, 0, 0); -moz-user-select: none; -o-user-select: none; -webkit-user-select: none">
+                <img src="/static/png/logo.png"/ style="width: 256px; padding-top: 128px; -moz-user-drag: none; -o-user-drag: none; -webkit-user-drag: none">
+                <div style="position: absolute; width: 512px; left: 0; right: 0; margin: auto; -moz-user-select: text; -o-user-select: text; -webkit-user-select: text">
+                    <div style="padding-top: 16px; text-align: justify">{{text|safe}}</div>
+                    <div style="padding-top: 16px">{{settings.SITENAME}} requires JavaScript.</div>
+                </div>
+            </div>
         </noscript>
     </body>
 </html>

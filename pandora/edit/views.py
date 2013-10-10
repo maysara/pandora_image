@@ -204,8 +204,8 @@ def getEdit(request):
     '''
     data = json.loads(request.POST['data'])
     if 'id' in data:
-        edit = get_edit_or_404_json(data['id'])
         response = json_response()
+        edit = get_edit_or_404_json(data['id'])
         if edit.accessible(request.user):
             response['data'] = edit.json(user=request.user)
         else:

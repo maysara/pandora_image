@@ -86,6 +86,14 @@ if __name__ == "__main__":
         if old < 3448:
             if os.path.exists('static/pandora'):
                 run('bzr', 'resolved', 'static/pandora')
+        if old < 3651:
+            if os.path.exists('src/django/.git'):
+                os.chdir(os.path.join(base, 'src/django'))
+                run('git', 'checkout', 'stable/1.4.x')
+                run('git', 'pull')
+                os.chdir(base)
+        if old < 3666:
+            run('./bin/pip', 'install', '-r', 'requirements.txt')
     else:
 
         if len(sys.argv) == 1:

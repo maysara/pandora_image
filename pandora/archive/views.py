@@ -246,6 +246,7 @@ def firefogg_upload(request):
                     response['result'] = -1
                 elif form.cleaned_data['done']:
                     f.uploading = False
+                    f.queued = True
                     f.save()
                     #FIXME: this fails badly if rabbitmq goes down
                     try:
@@ -298,6 +299,7 @@ def direct_upload(request):
                 response['result'] = -1
             if form.cleaned_data['done']:
                 file.uploading = False
+                file.queued = True
                 file.save()
                 #try/execpt so it does not fail if rabitmq is down
                 try:
@@ -311,6 +313,12 @@ def direct_upload(request):
     else:
         file, created = models.File.objects.get_or_create(oshash=oshash)
         if file.editable(request.user):
+            #remove previous uploads
+            if not created:
+                file.streams.all().delete()
+                file.delete_frames()
+                if file.item.rendered and file.selected:
+                    Item.objects.filter(id=file.item.id).update(rendered=False)
             file.uploading = True
             file.save()
             upload_url = request.build_absolute_uri('/api/upload/direct/?id=%s' % file.oshash)

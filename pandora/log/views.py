@@ -32,6 +32,8 @@ def log(request):
         user = None
     url = data.get('url', '').split('/static/')[-1]
     if 'text' in data:
+        if len(url) > 1000:
+            url = url[:997] + '...'
         l = models.Log(
             text=data['text'],
             line=int(data.get('line', 0)),

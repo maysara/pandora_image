@@ -73,15 +73,6 @@
         included in find annotations. // FIXME: the last bit is not implemented.
     */
     "clipLayers": ["publicnotes", "keywords", "subtitles"],
-    // fixme: either this, or filter: true in itemKeys, but not both
-    "filters": [
-        {"id": "director", "title": "Director", "type": "string"},
-        {"id": "country", "title": "Country", "type": "string"},
-        {"id": "year", "title": "Year", "type": "integer"},
-        {"id": "language", "title": "Languages", "type": "string"},
-        {"id": "featuring", "title": "Featuring", "type": "string"},
-        {"id": "keywords", "title": "Keywords", "type": "string"}
-    ],
     "flags": false,
     "help": [
         {"id": "help", "title": "Help"},
@@ -157,6 +148,7 @@
             "autocomplete": true,
             "columnRequired": true,
             "columnWidth": 180,
+            "filter": true,
             "sort": true,
             "sortType": "person"
         },
@@ -225,6 +217,7 @@
             "id": "keywords",
             "title": "Keywords",
             "type": "layer",
+            "filter": true,
             "find": true
         },
         {
@@ -502,6 +495,11 @@
         "importPosters": false,
         "importFrames": false 
     },
+    "menuExtras": [
+        "user",
+        //"locale",
+        "reload"
+    ],
     "personalLists": [
         {"title": "Favorites"}
     ],
@@ -516,7 +514,7 @@
     ],
     "sendReferrer": true,
     "site": {
-        "description": "This is a demp of pan.do/ra a free, open source media archive. It allows you to manage large, decentralized collections of video, to collaboratively create metadata and time-based annotations, and to serve your archive as a cutting-edge web application.",
+        "description": "This is a demo of pan.do/ra - a free, open source media archive. It allows you to manage large, decentralized collections of video, to collaboratively create metadata and time-based annotations, and to serve your archive as a cutting-edge web application.",
         "email": {
             // E-mail address in contact form (to)
             "contact": "system@pandora.local",
@@ -527,7 +525,6 @@
         },
         "https": false,
         "id": "pandora",
-        "locale": "en",
         "name": "Demo",
         "url": "pandora.local",
         "videoprefix": ""
@@ -580,7 +577,6 @@
             "calendarSelection": "",
             "clipColumns": 2,
             "clipSort": [{"key": "index", "operator": "+"}],
-            "clipView": "list",
             "columns": {
                 "Colors": {
                     "columns": ["title", "director", "language", "hue", "saturation", "brightness"],
@@ -588,7 +584,7 @@
                 }
             },
             "edit": "",
-            "editPoints": {},
+            "edits": {},
             "embedSize": 256,
             "filters": [
                 {"id": "director", "sort": [{"key": "items", "operator": "-"}]},
@@ -613,7 +609,7 @@
             "listSort": [{"key": "title", "operator": "+"}],
             "listView": "grid",
             "lists": {},
-            "locale": "",
+            "locale": "en",
             "mapFind": "",
             "mapSelection": "",
             "page": "",
@@ -622,6 +618,7 @@
                 "faq": "",
                 "help": "",
                 "news": "",
+                "preferences": "",
                 "tv": ""
             },
             "section": "items",
@@ -669,7 +666,7 @@
             "showTimeline": true,
             "sidebarSize": 256,
             "text": "",
-            "textPositions": {},
+            "texts": {},
             "theme": "oxmedium",
             "updateAdvancedFindResults": false,
             "videoLoop": false,
@@ -687,6 +684,7 @@
     },
     "userLevels": ["guest", "member", "staff", "admin"],
     "video": {
+        "torrent": true,
         "download": true,
         //supported formats: webm, mp4
         //wafaa commented the following line and replaced it by other line of code

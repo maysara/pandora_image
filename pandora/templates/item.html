@@ -31,19 +31,24 @@
     </head>
     <body>
         <noscript>
-            <img src="/{{id}}/{{icon}}256.jpg" alt="" style="float: left; margin-right: 8px">
-            <h1>{{title}}</h1>
-            {% for i in data %}
-                <div>
-                    <b>{{i.key}}</b>: {{i.value|safe}}
+            <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; text-align: center; background-color: rgb(144, 144, 144); font-family: Lucida Grande, Segoe UI, DejaVu Sans, Lucida Sans Unicode, Helvetica, Arial, sans-serif; font-size: 11px; color: rgb(0, 0, 0); -moz-user-select: none; -o-user-select: none; -webkit-user-select: none">
+                <img src="/{{id}}/{{icon}}128.jpg" alt="" style="padding-top: 128px; -moz-user-drag: none; -o-user-drag: none; -webkit-user-drag: none">
+                <div style="position: absolute; width: 512px; left: 0; right: 0; margin: auto; -moz-user-select: text; -o-user-select: text; -webkit-user-select: text">            
+                    <div style="padding: 16px 0 8px 0; font-weight: bold; font-size: 13px">{{title}}</div>
+                    {% for i in data %}
+                        <div style="text-align: justify">
+                            <b>{{i.key}}</b>: {{i.value|safe}}
+                        </div>
+                    {% endfor %}
+                    {% for c in clips %}
+                        <div style="clear:both;padding-top: 4px">
+                            <img src="/{{id}}/96p{{c.in}}.jpg" alt="" style="float: left; margin-right: 8px">
+                            {{c.annotations|safe}}
+                        </div>
+                    {% endfor %}
+                    <div style="padding-top: 16px">{{settings.SITENAME}} requires JavaScript.</div>
                 </div>
-            {% endfor %}
-            {% for c in clips %}
-                <div style="clear:both;padding-top: 4px">
-                    <img src="/{{id}}/96p{{c.in}}.jpg" alt="" style="float: left; margin-right: 8px">
-                    {{c.annotations|safe}}
-                </div>
-            {% endfor %}
+            </div>
         </noscript>
     </body>
 </html>

@@ -68,7 +68,8 @@ def load_config():
         #add missing defaults
         for section in (
             'capabilities', 'cantPlay', 'itemName', 'media', 'posters',
-            'site', 'tv', 'user.ui', 'user.ui.part', 'user.ui.showFolder'
+            'site', 'tv', 'user.ui', 'user.ui.part', 'user.ui.showFolder',
+            'menuExtras'
         ):
             parts = map(lambda p: p.replace('\0', '\\.'), section.replace('\\.', '\0').split('.'))
             #print 'checking', section
@@ -76,15 +77,24 @@ def load_config():
             d = default
             while len(parts):
                 part = parts.pop(0)
-                if part not in c:
-                    c[part] = {}
-                c = c[part]
                 d = d[part]
-            for key in d:
-                if key not in c:
-                    sys.stderr.write("adding default value for %s.%s = %s\n" % (
-                        section, key, str(d[key])))
-                    c[key] = d[key]
+                if part not in c:
+                    if isinstance(d, list):
+                        c[part] = []
+                    else:
+                        c[part] = {}
+                c = c[part]
+            if isinstance(d, list):
+                if not c:
+                    c += d
+                    sys.stderr.write("adding default value for %s = %s\n" % (
+                        section, str(d)))
+            else:
+                for key in d:
+                    if key not in c:
+                        sys.stderr.write("adding default value for %s.%s = %s\n" % (
+                            section, key, str(d[key])))
+                        c[key] = d[key]
 
         key = get_by_id(config['itemKeys'], 'title')
         if not 'autocompleteSort' in key:

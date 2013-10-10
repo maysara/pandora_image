@@ -119,6 +119,30 @@ def findLists(request):
     return render_to_json_response(response)
 actions.register(findLists)
 
+def getList(request):
+    '''
+        takes {
+            id: listid
+        }
+        returns {
+            id:
+            section:
+            ...
+        }
+    '''
+    data = json.loads(request.POST['data'])
+    if 'id' in data:
+        response = json_response()
+        list = get_list_or_404_json(data['id'])
+        if list.accessible(request.user):
+            response['data'] = list.json(user=request.user)
+        else:
+            response = json_response(status=403, text='not allowed')
+    else:
+        response = json_response(status=404, text='not found')
+    return render_to_json_response(response)
+actions.register(getList)
+
 @login_required_json
 def addListItems(request):
     '''

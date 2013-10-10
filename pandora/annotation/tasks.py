@@ -82,7 +82,7 @@ def add_annotations(data):
                 value=a['value'])
             annotation.save()
         #update facets if needed
-        if filter(lambda f: f['id'] == layer_id, settings.CONFIG['filters']):
+        if filter(lambda f: f['id'] == layer_id and f.get('filter'), settings.CONFIG['itemKeys']):
             item.update_layer_facet(layer_id)
         Item.objects.filter(id=item.id).update(modified=annotation.modified)
         annotation.item.modified = annotation.modified
@@ -99,7 +99,7 @@ def update_item(id):
     #cleanup orphaned clips
     Clip.objects.filter(item__id=a.item.id, annotations__id=None).delete()
     #update facets if needed
-    if filter(lambda f: f['id'] == a.layer, settings.CONFIG['filters']):
+    if filter(lambda f: f['id'] == a.layer and f.get('filter'), settings.CONFIG['itemKeys']):
         a.item.update_layer_facet(a.layer)
     Item.objects.filter(id=a.item.id).update(modified=a.modified)
     a.item.modified = a.modified

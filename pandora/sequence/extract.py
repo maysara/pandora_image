@@ -3,8 +3,6 @@
 from __future__ import division
 import Image
 import os
-import numpy
-import math
 
 ZONE_INDEX = []
 for pixel_index in range(64):
@@ -81,63 +79,45 @@ def get_sequences(path, position=0):
             sequences[mode][-1]['out'] = position
     return sequences, position
 
+class DataTimeline():
+    fps = 25
+    def __init__(self, path):
+        file_names = filter(lambda x: 'timelinedata8p' in x, os.listdir(path))
+        file_names = sorted(file_names, key=lambda x: int(x[14:-4]))
+        file_names = map(lambda x: path + x, file_names)
+        self.file_names = file_names
+        self.timeline_image = Image.open(file_names[0])
+        self.timeline_width = self.timeline_image.size[0]
+        self.current_tile = 0
+
+    def get_frame(self, pos):
+        frame = int(pos * self.fps)
+        tile = int(frame * 8 / self.timeline_width)
+        if self.current_tile != tile:
+            self.timeline_image = Image.open(self.file_names[tile])
+            self.current_tile = tile
+        x = frame * 8 - tile * self.timeline_width
+        return self.timeline_image.crop((x, 0, x + 8, 8))
+
 def get_cut_sequences(stream, position=0):
-    path = stream.timeline_prefix
+    timeline = DataTimeline(stream.timeline_prefix)
     cuts = list(stream.cuts) + [stream.duration]
     modes = ['color', 'shape']
     sequences = {}
     for mode in modes:
         sequences[mode] = []
-    position_start = position
-    fps = 25
-    file_names = filter(lambda x: 'timelinedata8p' in x, os.listdir(path))
-    file_names = sorted(file_names, key=lambda x: int(x[14:-4]))
-    file_names = map(lambda x: path + x, file_names)
 
-    def add_hash(cut, cut_data):
-        if sequences['color']:
-            start = sequences['color'][-1]['out']
-        else:
-            start = 0
-        end = position
-        frames = int(math.ceil((end - start) * fps))
-        #print 'add', start, end, frames
-        if frames:
-            cut_data /= frames
-            frame_image = Image.new('RGB', (8,8))
-            frame_image.putdata(list(tuple(pixel) for pixel in cut_data))
-            for mode in modes:
-                frame_hash = get_hash(frame_image, mode)
-                if sequences[mode] and sequences[mode][-1]['hash'] == frame_hash:
-                     sequences[mode][-1]['out'] = end
-                else:
-                    sequences[mode].append({
-                        'hash': frame_hash,
-                        'in': start,
-                        'out': end,
-                    })
-        else:
-            print 'fixme', cut_data
-
-    def next_cut():
-        if cuts:
-            cut = cuts.pop(0)
-        else:
-            cut = 0
-        return numpy.array(Image.new('RGB', (8,8)).getdata(), numpy.int64), cut
-
-    cut_data, cut = next_cut()
-
-    for file_name in file_names:
-        timeline_image = Image.open(file_name)
-        timeline_width = timeline_image.size[0]
-        for x in range(0, timeline_width, 8):
-            frame_image = timeline_image.crop((x, 0, x + 8, 8))
-            cut_data += numpy.array(frame_image.getdata(), numpy.int64)
-            position += 1 / fps
-            if cut and position > cut:
-                add_hash(cut, cut_data)
-                cut_data, cut = next_cut()
-    position += 1 / fps
-    add_hash(cut, cut_data)
+    position = 0
+    for cut in cuts:
+        center = position + (cut - position) / 2
+        center -= center % 0.04
+        frame_image = timeline.get_frame(center)
+        for mode in modes:
+            frame_hash = get_hash(frame_image, mode)
+            sequences[mode].append({
+                'hash': frame_hash,
+                'in': position,
+                'out': cut,
+            })
+        position = cut
     return sequences, position

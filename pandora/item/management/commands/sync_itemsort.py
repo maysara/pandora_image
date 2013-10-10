@@ -32,6 +32,7 @@ class Command(BaseCommand):
                           connection.introspection.data_types_reverse[row[1]]) for row in db_rows])
 
         model_fields = ['item_id'] + [f.name for f in models.ItemSort._meta.fields]
+        rebuild = False
 
         changes = []
         for name in db_types:
@@ -49,6 +50,7 @@ class Command(BaseCommand):
                     sql = 'CREATE INDEX "%s_%s_idx" ON "%s" ("%s")' % (table_name, name,
                                                                        table_name, name)
                     changes.append(sql)
+                    rebuild = True
                 elif f.__class__.__name__ != db_types[name]:
                     sql = 'ALTER TABLE "%s" DROP COLUMN "%s"' % (table_name, name )
                     changes.append(sql)
@@ -57,6 +59,7 @@ class Command(BaseCommand):
                     sql = 'CREATE INDEX "%s_%s_idx" ON "%s" ("%s")' % (table_name, name,
                                                                        table_name, name)
                     changes.append(sql)
+                    rebuild = True
                 elif db_types[name] == 'CharField' and db_fields[name][3] != f.max_length:
                     sql = 'ALTER TABLE "%s" ALTER COLUMN "%s" TYPE %s' % (table_name, name,
                                                                           col_type)
@@ -64,6 +67,7 @@ class Command(BaseCommand):
                     sql = 'ALTER TABLE "%s" ALTER COLUMN "%s" %s NOT NULL' % (table_name, name,
                                                                     f.null and "DROP" or "SET")
                     changes.append(sql)
+                    rebuild = True
        
         #also update clip index
         table_name = clip.models.Clip._meta.db_table
@@ -98,9 +102,17 @@ class Command(BaseCommand):
                     sql = 'BEGIN'
                     changes.append(sql)
         if changes:
-            print "Database needs to be updated, plase wait..."
+            print "Updating database schema..."
             for sql in changes:
                 if options['debug']:
                     print sql
                 cursor.execute(sql)
             transaction.commit_unless_managed()
+            if rebuild:
+                print "Updating sort values..."
+                ids = [i['id'] for i in models.Item.objects.all().values('id')]
+                for id in ids:
+                    i = models.Item.objects.get(pk=id)
+                    if optoins['debug']:
+                        print i
+                    i.update_sort()

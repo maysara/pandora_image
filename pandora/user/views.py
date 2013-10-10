@@ -23,6 +23,7 @@ from item import utils
 
 import models
 from decorators import capability_required_json
+import persona
 
 def signin(request):
     '''
@@ -42,17 +43,24 @@ def signin(request):
         }
     '''
     data = json.loads(request.POST['data'])
-    if 'username' in data and 'password' in data:
+    if 'assertion' in data:
+        response = persona.signin(request)
+    elif 'username' in data and 'password' in data:
         data['username'] = data['username'].strip()
-        qs = User.objects.filter(username__iexact=data['username'])
-        if qs.count() == 0:
-            response = json_response({
-                'errors': {
-                    'username': 'Unknown Username'
-                }
-            })
+        if settings.AUTH_CHECK_USERNAME:
+            qs = User.objects.filter(username__iexact=data['username'])
+            if qs.count() == 0:
+                response = json_response({
+                    'errors': {
+                        'username': 'Unknown Username'
+                    }
+                })
+                username = None
+            else:
+                username = qs[0].username
         else:
-            username = qs[0].username
+            username = data['username']
+        if username:
             user = authenticate(username=username, password=data['password'])
             if user is not None:
                 if user.is_active:
@@ -136,7 +144,7 @@ def signup(request):
         elif User.objects.filter(email__iexact=data['email']).count() > 0:
             response = json_response({
                 'errors': {
-                    'email': 'Email address already exits'
+                    'email': 'Email address already exists'
                 }
             })
         elif not data['password']:
@@ -391,12 +399,15 @@ def findUser(request):
     #    keys = ['username', 'level']
     keys = ['username', 'level']
 
-    if data['key'] == 'email':
-        response['data']['users'] = [models.user_json(u, keys)
-                                     for u in User.objects.filter(email__iexact=data['value'])]
+    if settings.AUTH_CHECK_USERNAME:
+        if data['key'] == 'email':
+            response['data']['users'] = [models.user_json(u, keys)
+                                         for u in User.objects.filter(email__iexact=data['value'])]
+        else:
+            response['data']['users'] = [models.user_json(u, keys)
+                                         for u in User.objects.filter(username__iexact=data['value'])]
     else:
-        response['data']['users'] = [models.user_json(u, keys)
-                                     for u in User.objects.filter(username__iexact=data['value'])]
+        response['data']['users'] = [{'username': data['value'], 'level': 'member'}]
     return render_to_json_response(response)
 actions.register(findUser)
 
@@ -626,7 +637,7 @@ def contact(request):
             'name': name,
             'email': email,
             'subject': subject,
-            'message': data['message'].strip(),
+            'message': ox.decode_html(data['message']).strip(),
             'sitename': settings.SITENAME,
             'footer': settings.CONFIG['site']['email']['footer'],
             'url': request.build_absolute_uri('/'),

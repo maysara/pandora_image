@@ -183,6 +183,7 @@
             "title": "People",
             "type": ["string"],
             "autocomplete": true,
+            "filter": true,
             "find": true
         },
         {
@@ -272,18 +273,21 @@
             "id": "places",
             "title": "Places",
             "type": "layer",
+            "filter": true,
             "find": true
         },
         {
             "id": "events",
             "title": "Events",
             "type": "layer",
+            "filter": true,
             "find": true
         },
         {
             "id": "keywords",
             "title": "Keywords",
             "type": "layer",
+            "filter": true,
             "find": true
         },
         {
@@ -584,6 +588,11 @@
         "importPosters": false,
         "importFrames": false 
     },
+    "menuExtras": [
+        "user",
+        //"locale",
+        "reload"
+    ],
     "personalLists": [
         {"title": "Favorites"}
     ],
@@ -608,7 +617,6 @@
             "system": "system@pad.ma"
         },
         "https": true,
-        "locale": "en",
         "id": "padma",
         "name": "Pad.ma",
         "url": "pad.ma",
@@ -661,7 +669,6 @@
             "calendarSelection": "",
             "clipColumns": 2,
             "clipSort": [{"key": "index", "operator": "+"}],
-            "clipView": "list",
             "columns": {
                 "Colors": {
                     "columns": ["title", "source", "project", "language", "hue", "saturation", "brightness"],
@@ -669,7 +676,7 @@
                 }
             },
             "edit": "",
-            "editPoints": {},
+            "edits": {},
             "embedSize": 256,
             "filters": [
                 {"id": "source", "sort": [{"key": "name", "operator": "+"}]},
@@ -695,7 +702,7 @@
             "listSort": [{"key": "title", "operator": "+"}],
             "listView": "grid",
             "lists": {},
-            "locale": "",
+            "locale": "en",
             "mapFind": "",
             "mapSelection": "",
             "page": "",
@@ -704,6 +711,7 @@
                 "faq": "",
                 "help": "",
                 "news": "",
+                "preferences": "",
                 "tv": ""
             },
             "section": "items",
@@ -752,7 +760,7 @@
             "showTimeline": true,
             "sidebarSize": 256,
             "text": "",
-            "textPositions": {},
+            "texts": {},
             "theme": "oxlight",
             "updateAdvancedFindResults": false,
             "videoLoop": false,
@@ -770,6 +778,7 @@
     },
     "userLevels": ["guest", "member", "staff", "admin"],
     "video": {
+        "torrent": true,
         //wafaa commented the following line and replaced it by other line of code
         //"formats": ["webm", "mp4"],
         //Wafaa choose webp format instead of jpg extension fit for Images

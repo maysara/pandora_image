@@ -33,5 +33,3 @@ TEMPLATE_DEBUG = True
 #with nginx X-Accel-Redirect set this to True
 #XACCELREDIRECT = False
 XACCELREDIRECT = True
-
-

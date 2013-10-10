@@ -87,9 +87,9 @@ def process_stream(fileId):
     '''
     file = models.File.objects.get(id=fileId)
     streams = file.streams.filter(source=None)
+    models.File.objects.filter(id=fileId).update(encoding=True, queued=False)
     if streams.count() > 0:
         stream = streams[0]
-        models.File.objects.filter(id=fileId).update(encoding=True)
         stream.make_timeline()
         stream.extract_derivatives()
         file = models.File.objects.get(id=fileId)
@@ -100,6 +100,7 @@ def process_stream(fileId):
         file.item.update_timeline()
     if file.item.rendered:
         file.item.save()
+    models.File.objects.filter(id=fileId).update(encoding=False)
     return True
 
 @task(queue="encoding")
@@ -107,6 +108,7 @@ def extract_stream(fileId):
     '''
         extract stream from direct upload
     '''
+    models.File.objects.filter(id=fileId).update(encoding=True, queued=False)
     file = models.File.objects.get(id=fileId)
     if file.data:
         config = settings.CONFIG['video']
@@ -114,7 +116,6 @@ def extract_stream(fileId):
             file=file, resolution=max(config['resolutions']),
             format=config['formats'][0])
         if created:
-            models.File.objects.filter(id=fileId).update(encoding=True)
             stream.media.name = stream.path(stream.name())
             stream.encode()
             if stream.available:
@@ -125,7 +126,7 @@ def extract_stream(fileId):
                     file.item.update_timeline()
                 if file.item.rendered:
                     file.item.save()
-            models.File.objects.filter(id=fileId).update(encoding=False)
+    models.File.objects.filter(id=fileId).update(encoding=False)
 
 @task(queue="encoding")
 def extract_derivatives(fileId, rebuild=False):

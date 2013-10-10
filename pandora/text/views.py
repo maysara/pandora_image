@@ -97,6 +97,9 @@ def getText(request):
             text = qs[0]
     else:
         text = get_text_or_404_json(data['id'])
+        if not text.accessible(request.user):
+            text = None
+            response['status']['code'] = 404
     if text:
         response['data'] = text.json(user=request.user)
     return render_to_json_response(response)

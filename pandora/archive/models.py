@@ -77,6 +77,7 @@ class File(models.Model):
     available = models.BooleanField(default = False)
     selected = models.BooleanField(default = False)
     uploading = models.BooleanField(default = False)
+    queued = models.BooleanField(default = False)
     encoding = models.BooleanField(default = False)
     wanted = models.BooleanField(default = False)
 
@@ -153,6 +154,10 @@ class File(models.Model):
         if self.item:
             for key in self.ITEM_INFO:
                 data[key] = self.item.get(key)
+                if isinstance(data[key], basestring):
+                    data[key] = ox.decode_html(data[key])
+                elif isinstance(data[key], list):
+                    data[key] = [ox.decode_html(e) for e in data[key]]
             if self.item.get('series'):
                 data['isEpisode'] = True
             data['directorSort'] = [get_name_sort(n) for n in self.item.get('director', [])]
@@ -343,11 +348,22 @@ class File(models.Model):
         duration = self.duration
         if self.type != 'video':
             duration = None
+        state = ''
+        if self.encoding:
+            state = 'encoding'
+        elif self.queued:
+            state = 'queued'
+        elif self.uploading:
+            state = 'uploading'
+        elif self.available:
+            state = 'available'
+        elif self.wanted:
+            state = 'wanted'
         data = {
             'audioCodec': self.audio_codec,
             'available': self.available,
             'duration': duration,
-            'encoding': self.encoding,
+            'state': state,
             'framerate': self.framerate,
             'id': self.oshash,
             'instances': [i.json() for i in self.instances.all()],
@@ -363,6 +379,7 @@ class File(models.Model):
         for key in self.PATH_INFO:
             data[key] = self.info.get(key)
         data['users'] = list(set([i['user'] for i in data['instances']]))
+        data['item'] = self.item.itemId
         if keys:
             for k in data.keys():
                 if k not in keys:
@@ -371,17 +388,27 @@ class File(models.Model):
 
     def all_paths(self):
         return [self.path] + [i.path for i in self.instances.all()]
+    
+    def delete(self, *args, **kwargs):
+        self.delete_files()
+        super(File, self).delete(*args, **kwargs)
 
     def delete_frames(self):
         frames = os.path.join(settings.MEDIA_ROOT, self.get_path('frames'))
         if os.path.exists(frames):
             shutil.rmtree(frames)
 
+    def delete_files(self):
+        if self.data:
+            self.data.delete()
+        self.streams.all().delete()
+        prefix = os.path.join(settings.MEDIA_ROOT, self.get_path(''))
+        if os.path.exists(prefix):
+            shutil.rmtree(prefix)
+
 def delete_file(sender, **kwargs):
     f = kwargs['instance']
-    #FIXME: delete streams here
-    if f.data:
-        f.data.delete()
+    f.delete_files()
 pre_delete.connect(delete_file, sender=File)
 
 class Volume(models.Model):
@@ -564,6 +591,7 @@ class Stream(models.Model):
             if extract.stream(media, target, self.name(), info):
                 self.available = True
             else:
+                self.media = None
                 self.available = False
             self.save()
 
@@ -578,6 +606,8 @@ class Stream(models.Model):
     def save(self, *args, **kwargs):
         if self.media and not self.info:
             self.info = ox.avinfo(self.media.path)
+            if 'path' in self.info:
+                del self.info['path']
         self.oshash = self.info.get('oshash')
         self.duration = self.info.get('duration', 0)
         if 'video' in self.info and self.info['video']:

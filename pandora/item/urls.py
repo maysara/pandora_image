@@ -14,9 +14,9 @@ urlpatterns = patterns("item.views",
 
     #video
     #Wafaa choose webp format instead of jpg extension fit for Images   
-		#(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webm|ogv|mp4)$', 'video'),
+    #(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webm|ogv|mp4)$', 'video'),
     #(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>png)$', 'video'),
-		#(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webp)$', 'video'),
+    #(r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webp)$', 'video'),
     #image
     # uwe
     (r'^(?P<id>[A-Z0-9].*)/(?P<resolution>\d+)p(?P<index>\d*)\.(?P<format>webp)$', 'image'),
@@ -24,6 +24,9 @@ urlpatterns = patterns("item.views",
     #torrent
     (r'^(?P<id>[A-Z0-9].*)/torrent$', 'torrent'),
     (r'^(?P<id>[A-Z0-9].*)/torrent/(?P<filename>.*?)$', 'torrent'),
+
+    #download
+    (r'^(?P<id>[A-Z0-9].*)/download/$', 'download'),
 
     #export
     (r'^(?P<id>[A-Z0-9].*)/json$', 'item_json'),

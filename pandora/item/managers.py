@@ -14,7 +14,7 @@ import utils
 from ox.django.query import QuerySet
 
 
-def parseCondition(condition, user):
+def parseCondition(condition, user, owner=None):
     '''
     condition: {
             value: "war"
@@ -42,9 +42,6 @@ def parseCondition(condition, user):
         exclude = False
 
     facet_keys = models.Item.facet_keys + ['title']
-    for f in settings.CONFIG['filters']:
-        if f['id'] not in facet_keys:
-            facet_keys.append(f['id'])
     key_type = settings.CONFIG['keys'].get(k, {'type':'string'}).get('type')
     if isinstance(key_type, list):
         key_type = key_type[0]
@@ -59,6 +56,17 @@ def parseCondition(condition, user):
     }.get(key_type, key_type)
     if k == 'list':
         key_type = ''
+
+    if v == '{me}' and op == '==':
+        if not owner:
+            owner = user
+        if k == 'user':
+            v = owner.username
+        elif k == 'groups':
+            q = Q(groups__in=owner.groups.all())
+            if exclude:
+                q = ~q
+            return q
 
     if (not exclude and op == '=' or op in ('$', '^')) and v == '':
         return Q()
@@ -159,7 +167,7 @@ def parseCondition(condition, user):
                         data = l.query
                         q = parseConditions(data.get('conditions', []),
                                             data.get('operator', '&'),
-                                            user)
+                                            user, l.user)
                     else:
                         q = Q(id__in=l.items.all())
                     if exclude:
@@ -205,7 +213,7 @@ def parseCondition(condition, user):
             q = ~q
         return q
 
-def parseConditions(conditions, operator, user):
+def parseConditions(conditions, operator, user, owner=None):
     '''
     conditions: [
         {
@@ -228,9 +236,9 @@ def parseConditions(conditions, operator, user):
     for condition in conditions:
         if 'conditions' in condition:
             q = parseConditions(condition['conditions'],
-                             condition.get('operator', '&'), user)
+                             condition.get('operator', '&'), user, owner)
         else:
-            q = parseCondition(condition, user)
+            q = parseCondition(condition, user, owner)
         if isinstance(q, list):
             conn += q
         elif q:

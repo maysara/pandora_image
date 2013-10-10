@@ -895,10 +895,9 @@ class Item(models.Model):
                 Facet.objects.get_or_create(item=self, key=key, value=value, sortvalue=sortvalue)
 
     def update_layer_facets(self):
-        filters = [f['id'] for f in settings.CONFIG['filters']]
-        for layer in settings.CONFIG['layers']:
-            if layer['id'] in filters:
-                self.update_layer_facet(layer['id'])
+        for k in settings.CONFIG['itemKeys']:
+            if k.get('filter') and k['type'] == 'layer':
+                self.update_layer_facet(k['id'])
 
     def update_facets(self):
         for key in self.facet_keys + ['title']:

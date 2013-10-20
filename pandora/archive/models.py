@@ -29,7 +29,6 @@ class File(models.Model):
     PATH_INFO = (
         'episodes', 'extension', 'language', 'part', 'partTitle', 'version'
     )
-    # Why is this hardcoded ?? -- uwe
     ITEM_INFO = (
         'title', 'director', 'year',
         'season', 'episode', 'episodeTitle',
@@ -117,11 +116,6 @@ class File(models.Model):
                    self.duration == 0.04:
                     self.is_video = False
                     self.video_codec = ''
-                # uwe added the following condition statement(s)
-                if self.path.endswith('.jpg') or \
-                   self.path.endswith('.png') or \
-                   self.duration == 0.04:
-                    self.is_image = True
             else:
                 self.is_video = False
                 self.display_aspect_ratio = "4:3"
@@ -140,9 +134,7 @@ class File(models.Model):
                 self.audio_codec = ''
                 self.sampleate = 0
                 self.channels = 0
-                #uwe adding image code
-                if 'image' in self.info and self.info['image']:
-                        print "I'm an image ..."
+
             if self.framerate:
                 self.pixels = int(self.width * self.height * float(utils.parse_decimal(self.framerate)) * self.duration)
 
@@ -506,10 +498,8 @@ class Stream(models.Model):
 
     file = models.ForeignKey(File, related_name='streams')
     resolution = models.IntegerField(default=96)
-    '''wafaa commented the following line and replaced it by other line of code'''
-    #format = models.CharField(max_length=255, default='webm')
-    #format = models.CharField(max_length=255, default='jpg')
-    format = models.CharField(max_length=255, default='webp')
+    format = models.CharField(max_length=255, default='webm')
+
     media = models.FileField(default=None, blank=True, upload_to=lambda f, x: f.path(x))
     source = models.ForeignKey('Stream', related_name='derivatives', default=None, null=True)
     available = models.BooleanField(default=False)

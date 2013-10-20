@@ -876,9 +876,7 @@
     "userLevels": ["guest", "member", "student", "staff", "admin"],
     "video": {
         "torrent": true,
-        ///Wafaa choose webp format instead of webm extension fit for Images
-        //"formats": ["webm", "mp4"],
-        "formats": ["webp"],		
+        "formats": ["webm", "mp4"],
         "previewRatio": 1.375,
         "resolutions": [240, 480]
     }

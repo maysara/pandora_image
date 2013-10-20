@@ -84,11 +84,8 @@ class Migration(SchemaMigration):
             'cuts': ('ox.django.fields.TupleField', [], {'default': '[]'}),
             'duration': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'file': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'streams'", 'to': "orm['archive.File']"}),
-            '''wafaa commented the following line and replaced it by other line of code'''            
             'format': ('django.db.models.fields.CharField', [], {'default': "'webm'", 'max_length': '255'}),
-            #'format': ('django.db.models.fields.CharField', [], {'default': "'jpg'", 'max_length': '255'}),
-						#'format': ('django.db.models.fields.CharField', [], {'default': "'webp'", 'max_length': '255'}),
-						'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'info': ('ox.django.fields.DictField', [], {'default': '{}'}),
             'media': ('django.db.models.fields.files.FileField', [], {'default': 'None', 'max_length': '100', 'blank': 'True'}),
             'oshash': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'db_index': 'True'}),

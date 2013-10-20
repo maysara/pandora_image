@@ -204,13 +204,10 @@ def addMedia(request):
         f = models.File(oshash=oshash, item=i)
         f.path = data.get('filename', 'Untitled')
         extension = f.path.split('.')
-        #what do those couple of lines mean ?? WHY? -- uwe
         if len(extension) > 1:
             extension = extension[-1]
         else:
-            '''wafaa commented the following line and replaced it by other line of code'''
             extension = 'webm'
-            #extension = 'webp'						
         f.selected = True
         if 'info' in data and data['info']:
             f.info = data['info']
